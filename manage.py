@@ -2,8 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import uvicorn
-
 
 
 def main():
@@ -21,4 +19,4 @@ def main():
 
 
 if __name__ == '__main__':
-    uvicorn.run("imapi.asgi:application", host='115.85.183.186', port=8000)
+    main()
