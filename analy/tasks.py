@@ -16,6 +16,7 @@ logger = get_task_logger(__name__)
 
 @shared_task(bind=True, track_started=True)
 def video(request):
+    request = json.dumps(request)
     insert_data = json.loads(request)
     userkey = insert_data.get("userkey")
     videoNo = insert_data.get("videoNo")
