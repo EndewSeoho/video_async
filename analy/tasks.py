@@ -33,6 +33,7 @@ def video(self, userkey, videoNo, videoaddress):
     # sound_confirm = soundcheck(videoaddress)
     sound_confirm = 0
 
+    Face_count_list = []
     Gaze_list = []
     Roll_list = []
     Emotion_list = []
