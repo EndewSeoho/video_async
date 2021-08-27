@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-+*o)z4qy^27&#pqpy+1gt+pq%_zbyj137j$ly$+hh@x0jak9^w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['115.85.183.186']
+ALLOWED_HOSTS = [#'115.85.183.186'
+    '127.0.0.1',
+    '*',]
 
 
 # Application definition
@@ -39,7 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'analy',
     'rest_framework',
+    'django_celery_results',
 ]
+
+CELERY_BROKER_URL = 'amqp://localhost'
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Seoul'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
