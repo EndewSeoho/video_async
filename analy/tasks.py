@@ -15,7 +15,7 @@ from .function import *
 logger = get_task_logger(__name__)
 
 @shared_task(bind=True, track_started=True)
-def video(request):
+def video(request, **kwargs):
     insert_data = json.loads(request.body)
     userkey = insert_data.get("userkey")
     videoNo = insert_data.get("videoNo")

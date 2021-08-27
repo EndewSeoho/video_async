@@ -346,6 +346,6 @@ def helloAPI(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def post(request):
-    print(request)
-    
+    res = video(request)
+    res.delay()
     return Response("Done", status=200)
