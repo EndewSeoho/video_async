@@ -107,6 +107,7 @@ def video(self, userkey, videoNo, videoaddress):
                     sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
                     sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
                     EmotionResult = list_Face[0].fEmotionScore
+                    print(EmotionResult)
 
                     Emotion_list.append(EmotionResult)
 
