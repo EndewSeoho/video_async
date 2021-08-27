@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_celery_beat',
     'django_celery_results',
+    'background_task',
 ]
 
 CELERY_ALWAYS_EAGER = True
