@@ -26,7 +26,8 @@ def video(self, userkey, videoNo, videoaddress):
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(videoaddress)
     FPS = cv2.CAP_PROP_FPS
-    sound_confirm = soundcheck(videoaddress)
+    # sound_confirm = soundcheck(videoaddress)
+    sound_confirm = 0
 
     Gaze_list = []
     Roll_list = []
