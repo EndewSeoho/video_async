@@ -9,7 +9,8 @@ import asyncio
 from .function import *
 from .tasks import video
 
-from asgiref.sync import sync_to_async
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
 def helloAPI(request):
@@ -343,6 +344,7 @@ def helloAPI(request):
 #     return Response("Done", status=200)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def post(request):
     video(request).delay()
     return Response("Done", status=200)
