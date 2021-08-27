@@ -17,7 +17,7 @@ from .function import *
 
 logger = get_task_logger(__name__)
 
-@shared_task(bind=True, track_started=True)
+# @shared_task(bind=True, track_started=True)
 # @background(schedule=10)
 def video(self, userkey, videoNo, videoaddress):
     # request = json.dumps(request)
