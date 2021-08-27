@@ -346,6 +346,7 @@ def helloAPI(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def post(request):
+    request = json.dumps(request)
     insert_data = json.loads(request)
     userkey = insert_data.get("userkey")
     videoNo = insert_data.get("videoNo")
