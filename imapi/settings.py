@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'analy',
     'rest_framework',
-    'django_celery_results',
 ]
 
 BROKER_URL = 'redis://localhost:6379/0'
