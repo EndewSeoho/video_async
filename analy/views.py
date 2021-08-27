@@ -347,10 +347,10 @@ def helloAPI(request):
 @permission_classes([AllowAny])
 def post(request):
     # request1 = json.dumps(request)
-    # insert_data = json.loads(request1)
-    userkey = request.get("userkey")
+    insert_data = json.loads(request)
+    # userkey = request.get("userkey")
     # videoNo = insert_data.get("videoNo")
     # videoaddress = insert_data.get("videoaddress")
-    # print(insert_data)
+    print(insert_data)
     # video(userkey, videoNo, videoaddress).delay()
     return Response("Done", status=200)
