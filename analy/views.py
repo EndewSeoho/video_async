@@ -352,5 +352,5 @@ def post(request):
     videoNo = insert_data.get("videoNo")
     videoaddress = insert_data.get("videoaddress")
     # print(request.data("userkey"))
-    video().delay(userkey, videoNo, videoaddress)
+    video(userkey, videoNo, videoaddress)
     return Response("Done", status=200)
