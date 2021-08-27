@@ -11,14 +11,14 @@ import cv2
 import copy
 import asyncio
 from .function import *
-from background_task import background
+# from background_task import background
 
 
 
 logger = get_task_logger(__name__)
 
 @shared_task(bind=True, track_started=True)
-@background(schedule=10)
+# @background(schedule=10)
 def video(self, userkey, videoNo, videoaddress):
     # request = json.dumps(request)
     # insert_data = json.loads(request)
