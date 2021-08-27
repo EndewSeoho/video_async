@@ -82,6 +82,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'imapi.wsgi.application'
 
+ASGI_APPLICATION = 'imapi.asgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
