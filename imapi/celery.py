@@ -5,7 +5,7 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'imapi.settings')
 
-app = Celery('imapi', backend='redis://', broker='redis://localhost:6379/0')
+app = Celery('imapi', backend='http://', broker='http://115.35.183.186:8000/0')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
