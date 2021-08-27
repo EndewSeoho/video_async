@@ -344,5 +344,5 @@ def helloAPI(request):
 
 @api_view(['POST'])
 def post(request):
-    video(request)
+    video(request).delay()
     return Response("Done", status=200)
