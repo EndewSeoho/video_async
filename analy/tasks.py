@@ -212,13 +212,43 @@ def video(self, userkey, videoNo, videoaddress):
         Emotion_sadness = Emotion_sadness + Emotion_list[i][4]
         Emotion_angry = Emotion_angry + Emotion_list[i][5]
         Emotion_neutral = Emotion_neutral + Emotion_list[i][6]
-    Emotion_surprise_mean = Emotion_surprise * 100 / len(Emotion_list)
-    Emotion_fear_mean = Emotion_fear * 100 / len(Emotion_list)
-    Emotion_disgust_mean = Emotion_disgust * 100 / len(Emotion_list)
-    Emotion_happy_mean = Emotion_happy * 100 / len(Emotion_list)
-    Emotion_sadness_mean = Emotion_sadness * 100 / len(Emotion_list)
-    Emotion_angry_mean = Emotion_angry * 100 / len(Emotion_list)
-    Emotion_neutral_mean = Emotion_neutral * 100 / len(Emotion_list)
+    if len(Emotion_list) != 0:
+        if Emotion_surprise != 0:
+            Emotion_surprise_mean = Emotion_surprise * 100 / len(Emotion_list)
+        else :
+            Emotion_surprise_mean = 0
+        if Emotion_fear != 0:
+            Emotion_fear_mean = Emotion_fear * 100 / len(Emotion_list)
+        else :
+            Emotion_fear_mean = 0
+        if Emotion_disgust != 0:
+            Emotion_disgust_mean = Emotion_disgust * 100 / len(Emotion_list)
+        else :
+            Emotion_disgust_mean = 0
+        if Emotion_happy != 0:
+            Emotion_happy_mean = Emotion_happy * 100 / len(Emotion_list)
+        else :
+            Emotion_happy_mean = 0
+        if Emotion_sadness != 0:
+            Emotion_sadness_mean = Emotion_sadness * 100 / len(Emotion_list)
+        else :
+            Emotion_sadness_mean = 0
+        if Emotion_angry != 0:
+            Emotion_angry_mean = Emotion_angry * 100 / len(Emotion_list)
+        else :
+            Emotion_angry_mean = 0
+        if Emotion_neutral != 0:
+            Emotion_neutral_mean = Emotion_neutral * 100 / len(Emotion_list)
+        else :
+            Emotion_neutral_mean = 0
+    else:
+        Emotion_surprise_mean = 0
+        Emotion_fear_mean = 0
+        Emotion_disgust_mean = 0
+        Emotion_happy_mean = 0
+        Emotion_sadness_mean = 0
+        Emotion_angry_mean = 0
+        Emotion_neutral_mean = 0
     # print("놀람", Emotion_surprise_mean, "%")
     # print("공포", Emotion_fear_mean, "%")
     # print("역겨움", Emotion_disgust_mean, "%")
