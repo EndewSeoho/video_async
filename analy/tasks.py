@@ -27,6 +27,7 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
     # videoNo = insert_data.get("videoNo")
     # videoaddress = insert_data.get("videoaddress")
     komoran = Komoran()
+    a1 = str(a1)
     insert_a1_pos = komoran.pos(a1)
 
     insert_a1_noun = []
