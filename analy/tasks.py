@@ -91,8 +91,8 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
     FPS = cv2.CAP_PROP_FPS
-    sound_confirm = soundcheck(fileUrl)
-    # sound_confirm = 0
+    # sound_confirm = soundcheck(fileUrl)
+    sound_confirm = 0
 
     Face_count_list = []
     Gaze_list = []
