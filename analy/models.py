@@ -47,6 +47,8 @@ class ImQzAnalysis(models.Model):
     str = models.CharField(db_column='STR', max_length=2500, blank=True, null=True)  # Field name made lowercase.
     qz_tts = models.CharField(db_column='QZ_TTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     regdate = models.DateTimeField(db_column='REGDATE', blank=True, null=True)  # Field name made lowercase.
+    watchfullness = models.IntegerField(db_column='WATCHFULLNESS', blank=True, null=True)  # Field name made lowercase.
+    job_noun = models.CharField(db_column='JOB_NOUN', max_length=5000, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

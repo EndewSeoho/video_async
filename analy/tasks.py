@@ -11,6 +11,7 @@ import cv2
 import copy
 import asyncio
 from .function import *
+from konlpy.tag import Komoran
 # from background_task import background
 
 
@@ -19,7 +20,7 @@ logger = get_task_logger(__name__)
 
 # @shared_task(bind=True, track_started=True)
 # @background(schedule=10)
-def video(userkey, videoNo, videoaddress):
+def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, code, a1):
     # request = json.dumps(request)
     # insert_data = json.loads(request)
     # userkey = insert_data.get("userkey")
@@ -28,7 +29,7 @@ def video(userkey, videoNo, videoaddress):
 
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
-    vc = cv2.VideoCapture(videoaddress)
+    vc = cv2.VideoCapture(fileUrl)
     FPS = cv2.CAP_PROP_FPS
     # sound_confirm = soundcheck(videoaddress)
     sound_confirm = 0
@@ -108,7 +109,7 @@ def video(userkey, videoNo, videoaddress):
                     sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
                     sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
                     EmotionResult = list_Face[0].fEmotionScore
-                    print(EmotionResult)
+                    # print(EmotionResult)
 
                     Emotion_list.append(EmotionResult)
 
@@ -348,7 +349,13 @@ def video(userkey, videoNo, videoaddress):
     left_hand_dict = {"point": Left_Hand_point_result}
     right_hand_dict = {"point": Right_Hand_point_result}
 
-    res = ImQzAnalysis(file_key = '1', user_key = userkey, qz_group = '1', qz_num = videoNo, group_code = '1', face_check = Face_analy_result,
+
+    zacad_result = zacad(qzNum, a1)
+    job_noun = {"wordList": zacad_result[0]}
+    watchfullness = zacad_result[1]
+
+
+    res = ImQzAnalysis(file_key = fileKey, user_key = userKey, qz_group = qzGroup, qz_num = qzNum, group_code = groupCode, face_check = Face_analy_result,
                        sound_check = sound_confirm, emotion_surprise = round(Emotion_surprise_mean, 5), emotion_fear = round(Emotion_fear_mean, 5), emotion_aversion = round(Emotion_disgust_mean, 5),
                        emotion_happy = round(Emotion_happy_mean, 5), emotion_sadness = round(Emotion_sadness_mean, 5), emotion_angry = round(Emotion_angry_mean, 5), emotion_neutral = round(Emotion_neutral_mean, 5),
                        gaze = json.dumps(gaze_dict), face_angle = round(Roll_mean_value, 5), shoulder_angle = round(Shoulder_slope_mean_value, 5), left_shoulder = json.dumps(left_shoulder_dict), left_shoulder_move_count = shoulder_left_count,
@@ -356,6 +363,61 @@ def video(userkey, videoNo, videoaddress):
                        center_shoulder_right_move_count = shoulder_horizontality_count_value[1], left_hand = json.dumps(left_hand_dict), left_hand_time = Left_Hand_time, left_hand_move_count = Left_Hand_count,
                        right_hand = json.dumps(right_hand_dict), right_hand_time = Right_Hand_time, right_hand_move_count = Right_Hand_count,
                        gaze_x_score = scoring.GAZE_X_scoring(Gaze_value[0]), gaze_y_score = scoring.GAZE_Y_scoring(Gaze_value[1]), shoulder_vertical_score = scoring.SHOULDER_VERTICAL_scoring(vertically_value),
-                       shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value))
+                       shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
+                       watchfullness=watchfullness, job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
+
+def zacad(qzNum, a1):
+    komoran = Komoran()
+    insert_a1_pos = komoran.pos(a1)
+
+    insert_a1_noun = []
+    for i in range(0, len(insert_a1_pos)):
+        if insert_a1_pos[i][1] == 'NNG' or insert_a1_pos[i][1] == 'NNP' or insert_a1_pos[i][1] == 'NR':
+            insert_a1_noun.append(insert_a1_pos[i][0])
+
+    # insert_a1_noun = set(insert_a1_noun)
+
+    # print("asdadasdd", insert_a1_noun)
+
+    insert_data_noun_non_reduplication = komoran.nouns(a1)
+    # print("asdasdaadsad", insert_data_noun2)
+
+    # job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
+    job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    # job_Noun(df) 첫열 코드 num 제거
+    del job_Noun['Unnamed: 0']
+
+    code = int(qzNum) - 1
+    code_Noun = job_Noun.loc[code]
+    code_Noun = code_Noun.values.tolist()
+    code_Noun_set = set(code_Noun)
+    # print('code_Noun_set >>', code_Noun_set)
+    input_data_set = set(insert_a1_noun)
+    same_Noun = input_data_set.intersection(code_Noun_set)
+    # print('same_Noun >>', same_Noun)
+    # print('input_data >>', input_data)
+
+    same_Noun_len = len(same_Noun)
+    input_data_len = len(input_data_set)
+
+    Similarity = same_Noun_len / input_data_len * 40
+    Similarity = round(Similarity, 1)
+
+    # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
+    same = []
+    for i in same_Noun:
+        t = 0
+        for ii in insert_a1_noun:
+            if i in i == ii:
+                t += 1
+            elif i in i != ii:
+                t += 0
+
+        dic = {"str": str(i), "cnt": t}
+        same.append(dic)
+
+
+
+    return (same, Similarity)
