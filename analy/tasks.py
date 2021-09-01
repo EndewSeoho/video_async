@@ -81,7 +81,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
 
 
             noun_res = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
-            noun_res.save()
+        noun_res.save()
             # dic = {"str": str(i), "cnt": t}
             # same.append(dic)
         #
