@@ -53,3 +53,14 @@ class ImQzAnalysis(models.Model):
     class Meta:
         managed = False
         db_table = 'IM_QZ_ANALYSIS'
+
+class ImQzAnalysisJobword(models.Model):
+    aj_key = models.AutoField(db_column='AJ_KEY', primary_key=True)  # Field name made lowercase.
+    file_key = models.IntegerField(db_column='FILE_KEY', blank=True, null=True)  # Field name made lowercase.
+    qz_group = models.IntegerField(db_column='QZ_GROUP', blank=True, null=True)  # Field name made lowercase.
+    word = models.IntegerField(db_column='WORD', blank=True, null=True)  # Field name made lowercase.
+    count = models.IntegerField(db_column='COUNT', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'IM_QZ_ANALYSIS_JOBWORD'

@@ -4,7 +4,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 
-from .models import ImQzAnalysis
+from .models import ImQzAnalysis, ImQzAnalysisJobword
 from .serializers import AnalySerializer
 import json
 import cv2
@@ -48,7 +48,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     del job_Noun['Unnamed: 0']
 
     if int(qzNum) == 1:
-        job_noun = {"wordList": []}
+        # job_noun = {"wordList": []}
         watchfullness = 0
 
     else:
@@ -79,18 +79,21 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
                 elif i in i != ii:
                     t += 0
 
-            dic = {"str": str(i), "cnt": t}
-            same.append(dic)
 
-        job_noun = {"wordList": same}
+            noun_res = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
+            noun_res.save()
+            # dic = {"str": str(i), "cnt": t}
+            # same.append(dic)
+        #
+        # job_noun = {"wordList": same}
         watchfullness = Similarity
 
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
     FPS = cv2.CAP_PROP_FPS
-    # sound_confirm = soundcheck(videoaddress)
-    sound_confirm = 0
+    sound_confirm = soundcheck(fileUrl)
+    # sound_confirm = 0
 
     Face_count_list = []
     Gaze_list = []
@@ -417,7 +420,8 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
                        right_hand = json.dumps(right_hand_dict), right_hand_time = Right_Hand_time, right_hand_move_count = Right_Hand_count,
                        gaze_x_score = scoring.GAZE_X_scoring(Gaze_value[0]), gaze_y_score = scoring.GAZE_Y_scoring(Gaze_value[1]), shoulder_vertical_score = scoring.SHOULDER_VERTICAL_scoring(vertically_value),
                        shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
-                       watchfullness=watchfullness, job_noun=json.dumps(job_noun, ensure_ascii=False))
+                       watchfullness=watchfullness)
+                       # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
 
