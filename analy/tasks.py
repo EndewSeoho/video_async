@@ -47,38 +47,43 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
-    jobCode = float(jobCode)
-    code = int(jobCode) - 1
-    code_Noun = job_Noun.loc[code]
-    code_Noun = code_Noun.values.tolist()
-    code_Noun_set = set(code_Noun)
-    # print('code_Noun_set >>', code_Noun_set)
-    input_data_set = set(insert_a1_noun)
-    same_Noun = input_data_set.intersection(code_Noun_set)
-    # print('same_Noun >>', same_Noun)
-    # print('input_data >>', input_data)
+    if qzNum != 1:
 
-    same_Noun_len = len(same_Noun)
-    input_data_len = len(input_data_set)
+        jobCode = float(jobCode)
+        code = int(jobCode) - 1
+        code_Noun = job_Noun.loc[code]
+        code_Noun = code_Noun.values.tolist()
+        code_Noun_set = set(code_Noun)
+        # print('code_Noun_set >>', code_Noun_set)
+        input_data_set = set(insert_a1_noun)
+        same_Noun = input_data_set.intersection(code_Noun_set)
+        # print('same_Noun >>', same_Noun)
+        # print('input_data >>', input_data)
 
-    Similarity = same_Noun_len / input_data_len * 40
-    Similarity = round(Similarity, 1)
+        same_Noun_len = len(same_Noun)
+        input_data_len = len(input_data_set)
 
-    # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
-    same = []
-    for i in same_Noun:
-        t = 0
-        for ii in insert_a1_noun:
-            if i in i == ii:
-                t += 1
-            elif i in i != ii:
-                t += 0
+        Similarity = same_Noun_len / input_data_len * 40
+        Similarity = round(Similarity, 1)
 
-        dic = {"str": str(i), "cnt": t}
-        same.append(dic)
+        # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
+        same = []
+        for i in same_Noun:
+            t = 0
+            for ii in insert_a1_noun:
+                if i in i == ii:
+                    t += 1
+                elif i in i != ii:
+                    t += 0
 
-    job_noun = {"wordList": same}
-    watchfullness = Similarity
+            dic = {"str": str(i), "cnt": t}
+            same.append(dic)
+
+        job_noun = {"wordList": same}
+        watchfullness = Similarity
+    else:
+        job_noun = {"wordList": []}
+        watchfullness = 0
 
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
