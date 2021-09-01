@@ -87,8 +87,6 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
         # job_noun = {"wordList": same}
         watchfullness = Similarity
 
-        noun_res.save()
-
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
@@ -425,6 +423,5 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
                        # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
-
-
+    noun_res.save()
 
