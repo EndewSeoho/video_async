@@ -26,6 +26,57 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
     # userkey = insert_data.get("userkey")
     # videoNo = insert_data.get("videoNo")
     # videoaddress = insert_data.get("videoaddress")
+    komoran = Komoran()
+    insert_a1_pos = komoran.pos(a1)
+
+    insert_a1_noun = []
+    for i in range(0, len(insert_a1_pos)):
+        if insert_a1_pos[i][1] == 'NNG' or insert_a1_pos[i][1] == 'NNP' or insert_a1_pos[i][1] == 'NR':
+            insert_a1_noun.append(insert_a1_pos[i][0])
+
+    # insert_a1_noun = set(insert_a1_noun)
+
+    # print("asdadasdd", insert_a1_noun)
+
+    insert_data_noun_non_reduplication = komoran.nouns(a1)
+    # print("asdasdaadsad", insert_data_noun2)
+
+    # job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
+    job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    # job_Noun(df) 첫열 코드 num 제거
+    del job_Noun['Unnamed: 0']
+
+    code = int(jobCode) - 1
+    code_Noun = job_Noun.loc[code]
+    code_Noun = code_Noun.values.tolist()
+    code_Noun_set = set(code_Noun)
+    # print('code_Noun_set >>', code_Noun_set)
+    input_data_set = set(insert_a1_noun)
+    same_Noun = input_data_set.intersection(code_Noun_set)
+    # print('same_Noun >>', same_Noun)
+    # print('input_data >>', input_data)
+
+    same_Noun_len = len(same_Noun)
+    input_data_len = len(input_data_set)
+
+    Similarity = same_Noun_len / input_data_len * 40
+    Similarity = round(Similarity, 1)
+
+    # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
+    same = []
+    for i in same_Noun:
+        t = 0
+        for ii in insert_a1_noun:
+            if i in i == ii:
+                t += 1
+            elif i in i != ii:
+                t += 0
+
+        dic = {"str": str(i), "cnt": t}
+        same.append(dic)
+
+    job_noun = {"wordList": same}
+    watchfullness = Similarity
 
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
@@ -348,58 +399,6 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
                             "right_spot": {"x": Center_shoulder_max[0], "y": Center_shoulder_max[1]}}
     left_hand_dict = {"point": Left_Hand_point_result}
     right_hand_dict = {"point": Right_Hand_point_result}
-
-    komoran = Komoran()
-    insert_a1_pos = komoran.pos(a1)
-
-    insert_a1_noun = []
-    for i in range(0, len(insert_a1_pos)):
-        if insert_a1_pos[i][1] == 'NNG' or insert_a1_pos[i][1] == 'NNP' or insert_a1_pos[i][1] == 'NR':
-            insert_a1_noun.append(insert_a1_pos[i][0])
-
-    # insert_a1_noun = set(insert_a1_noun)
-
-    # print("asdadasdd", insert_a1_noun)
-
-    insert_data_noun_non_reduplication = komoran.nouns(a1)
-    # print("asdasdaadsad", insert_data_noun2)
-
-    # job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
-    job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
-    # job_Noun(df) 첫열 코드 num 제거
-    del job_Noun['Unnamed: 0']
-
-    code = int(jobCode) - 1
-    code_Noun = job_Noun.loc[code]
-    code_Noun = code_Noun.values.tolist()
-    code_Noun_set = set(code_Noun)
-    # print('code_Noun_set >>', code_Noun_set)
-    input_data_set = set(insert_a1_noun)
-    same_Noun = input_data_set.intersection(code_Noun_set)
-    # print('same_Noun >>', same_Noun)
-    # print('input_data >>', input_data)
-
-    same_Noun_len = len(same_Noun)
-    input_data_len = len(input_data_set)
-
-    Similarity = same_Noun_len / input_data_len * 40
-    Similarity = round(Similarity, 1)
-
-    # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
-    same = []
-    for i in same_Noun:
-        t = 0
-        for ii in insert_a1_noun:
-            if i in i == ii:
-                t += 1
-            elif i in i != ii:
-                t += 0
-
-        dic = {"str": str(i), "cnt": t}
-        same.append(dic)
-
-    job_noun = {"wordList": same}
-    watchfullness = Similarity
 
 
     res = ImQzAnalysis(file_key = fileKey, user_key = userKey, qz_group = qzGroup, qz_num = qzNum, group_code = groupCode, face_check = Face_analy_result,
