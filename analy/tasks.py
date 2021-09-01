@@ -20,7 +20,7 @@ logger = get_task_logger(__name__)
 
 # @shared_task(bind=True, track_started=True)
 # @background(schedule=10)
-def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
+def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     # request = json.dumps(request)
     # insert_data = json.loads(request)
     # userkey = insert_data.get("userkey")
@@ -47,7 +47,7 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
-    code = int(jobCode) - 1
+    code = jobCode - 1
     code_Noun = job_Noun.loc[code]
     code_Noun = code_Noun.values.tolist()
     code_Noun_set = set(code_Noun)
