@@ -353,7 +353,7 @@ def post(request):
     groupCode = insert_data.get("groupCode")
     fileKey = insert_data.get("fileKey")
     fileUrl = insert_data.get("fileUrl")
-    qzNum = insert_data.get("qz_Num")
+    qzNum = insert_data.get("qzNum")
     jobCode = insert_data.get("jobCode")
     a1 = insert_data.get("a1")
     video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1)
