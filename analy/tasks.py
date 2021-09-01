@@ -349,26 +349,6 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
     left_hand_dict = {"point": Left_Hand_point_result}
     right_hand_dict = {"point": Right_Hand_point_result}
 
-
-    zacad_result = zacad(jobCode, qzNum, a1)
-    job_noun = {"wordList": zacad_result[0]}
-    watchfullness = zacad_result[1]
-
-
-    res = ImQzAnalysis(file_key = fileKey, user_key = userKey, qz_group = qzGroup, qz_num = qzNum, group_code = groupCode, face_check = Face_analy_result,
-                       sound_check = sound_confirm, emotion_surprise = round(Emotion_surprise_mean, 5), emotion_fear = round(Emotion_fear_mean, 5), emotion_aversion = round(Emotion_disgust_mean, 5),
-                       emotion_happy = round(Emotion_happy_mean, 5), emotion_sadness = round(Emotion_sadness_mean, 5), emotion_angry = round(Emotion_angry_mean, 5), emotion_neutral = round(Emotion_neutral_mean, 5),
-                       gaze = json.dumps(gaze_dict), face_angle = round(Roll_mean_value, 5), shoulder_angle = round(Shoulder_slope_mean_value, 5), left_shoulder = json.dumps(left_shoulder_dict), left_shoulder_move_count = shoulder_left_count,
-                       right_shoulder = json.dumps(right_shoulder_dict), right_shoulder_move_count = shoulder_right_count, center_shoulder = json.dumps(center_shoulder_dict), center_shoulder_left_move_count = shoulder_horizontality_count_value[0],
-                       center_shoulder_right_move_count = shoulder_horizontality_count_value[1], left_hand = json.dumps(left_hand_dict), left_hand_time = Left_Hand_time, left_hand_move_count = Left_Hand_count,
-                       right_hand = json.dumps(right_hand_dict), right_hand_time = Right_Hand_time, right_hand_move_count = Right_Hand_count,
-                       gaze_x_score = scoring.GAZE_X_scoring(Gaze_value[0]), gaze_y_score = scoring.GAZE_Y_scoring(Gaze_value[1]), shoulder_vertical_score = scoring.SHOULDER_VERTICAL_scoring(vertically_value),
-                       shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
-                       watchfullness=watchfullness, job_noun=json.dumps(job_noun, ensure_ascii=False))
-
-    res.save()
-
-def zacad(jobCode, qzNum, a1):
     komoran = Komoran()
     insert_a1_pos = komoran.pos(a1)
 
@@ -418,6 +398,22 @@ def zacad(jobCode, qzNum, a1):
         dic = {"str": str(i), "cnt": t}
         same.append(dic)
 
+    job_noun = {"wordList": same}
+    watchfullness = Similarity
 
 
-    return (same, Similarity)
+    res = ImQzAnalysis(file_key = fileKey, user_key = userKey, qz_group = qzGroup, qz_num = qzNum, group_code = groupCode, face_check = Face_analy_result,
+                       sound_check = sound_confirm, emotion_surprise = round(Emotion_surprise_mean, 5), emotion_fear = round(Emotion_fear_mean, 5), emotion_aversion = round(Emotion_disgust_mean, 5),
+                       emotion_happy = round(Emotion_happy_mean, 5), emotion_sadness = round(Emotion_sadness_mean, 5), emotion_angry = round(Emotion_angry_mean, 5), emotion_neutral = round(Emotion_neutral_mean, 5),
+                       gaze = json.dumps(gaze_dict), face_angle = round(Roll_mean_value, 5), shoulder_angle = round(Shoulder_slope_mean_value, 5), left_shoulder = json.dumps(left_shoulder_dict), left_shoulder_move_count = shoulder_left_count,
+                       right_shoulder = json.dumps(right_shoulder_dict), right_shoulder_move_count = shoulder_right_count, center_shoulder = json.dumps(center_shoulder_dict), center_shoulder_left_move_count = shoulder_horizontality_count_value[0],
+                       center_shoulder_right_move_count = shoulder_horizontality_count_value[1], left_hand = json.dumps(left_hand_dict), left_hand_time = Left_Hand_time, left_hand_move_count = Left_Hand_count,
+                       right_hand = json.dumps(right_hand_dict), right_hand_time = Right_Hand_time, right_hand_move_count = Right_Hand_count,
+                       gaze_x_score = scoring.GAZE_X_scoring(Gaze_value[0]), gaze_y_score = scoring.GAZE_Y_scoring(Gaze_value[1]), shoulder_vertical_score = scoring.SHOULDER_VERTICAL_scoring(vertically_value),
+                       shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
+                       watchfullness=watchfullness, job_noun=json.dumps(job_noun, ensure_ascii=False))
+
+    res.save()
+
+
+
