@@ -83,6 +83,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
             noun_res = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
             # dic = {"str": str(i), "cnt": t}
             # same.append(dic)
+            noun_res.save()
         #
         # job_noun = {"wordList": same}
         watchfullness = Similarity
@@ -423,5 +424,4 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
                        # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
-    noun_res.save()
 
