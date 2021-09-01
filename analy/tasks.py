@@ -47,6 +47,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
+    jobCode = float(jobCode)
     code = int(jobCode) - 1
     code_Noun = job_Noun.loc[code]
     code_Noun = code_Noun.values.tolist()
