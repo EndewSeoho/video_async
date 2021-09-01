@@ -81,13 +81,14 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
 
 
             noun_res = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
-    noun_res.save()
             # dic = {"str": str(i), "cnt": t}
             # same.append(dic)
         #
         # job_noun = {"wordList": same}
         watchfullness = Similarity
 
+    noun_res.save()
+    
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
