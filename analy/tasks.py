@@ -20,7 +20,7 @@ logger = get_task_logger(__name__)
 
 # @shared_task(bind=True, track_started=True)
 # @background(schedule=10)
-def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, code, a1):
+def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, jobCode, a1):
     # request = json.dumps(request)
     # insert_data = json.loads(request)
     # userkey = insert_data.get("userkey")
@@ -350,7 +350,7 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, code, a1):
     right_hand_dict = {"point": Right_Hand_point_result}
 
 
-    zacad_result = zacad(qzNum, a1)
+    zacad_result = zacad(jobCode, qzNum, a1)
     job_noun = {"wordList": zacad_result[0]}
     watchfullness = zacad_result[1]
 
@@ -368,7 +368,7 @@ def video(userKey, groupCode, qzGroup, fileKey, qzNum, fileUrl, code, a1):
 
     res.save()
 
-def zacad(qzNum, a1):
+def zacad(jobCode, qzNum, a1):
     komoran = Komoran()
     insert_a1_pos = komoran.pos(a1)
 
@@ -389,7 +389,7 @@ def zacad(qzNum, a1):
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
-    code = int(qzNum) - 1
+    code = int(jobCode) - 1
     code_Noun = job_Noun.loc[code]
     code_Noun = code_Noun.values.tolist()
     code_Noun_set = set(code_Noun)
