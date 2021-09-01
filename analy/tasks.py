@@ -47,7 +47,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
-    if qzNum == 1:
+    if qzNum = 1:
         job_noun = {"wordList": []}
         watchfullness = 0
 
