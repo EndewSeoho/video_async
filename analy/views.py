@@ -356,6 +356,6 @@ def post(request):
     qzNum = insert_data.get("qzNum")
     jobCode = insert_data.get("jobCode")
     a1 = insert_data.get("a1")
-    jobCode = int(jobCode)
+    jobCode = str(jobCode)
     video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1)
     return Response("Done", status=200)
