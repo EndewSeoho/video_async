@@ -42,8 +42,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     insert_data_noun_non_reduplication = komoran.nouns(a1)
     # print("asdasdaadsad", insert_data_noun2)
 
-    job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
-    # job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    # job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
+    job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 

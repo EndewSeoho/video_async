@@ -692,8 +692,8 @@ class Average:
         # ftp.login('withmind', 'dnlemakdlsem1!')
         # ftp.cwd('./analy_result')
         filename = '/Average.csv'
-        fileroute = 'C:/Users/withmind/Desktop'
-        # fileroute = '/home/ubuntu/project'
+        # fileroute = 'C:/Users/withmind/Desktop'
+        fileroute = '/home/ubuntu/project'
 
         # CSV 누적
         headersCSV = ['Gaze', 'Roll', 'Shoulder', 'vertically', 'horizontally', 'GestureTIME']
