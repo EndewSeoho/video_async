@@ -355,7 +355,7 @@ def post(request):
     fileKey = insert_data.get("fileKey")
     fileUrl = insert_data.get("fileUrl")
     zqCode = insert_data.get("zqCode")
-    zqCode = str(zqCode)
+    # zqCode = str(zqCode)
     stt = insert_data.get("stt")
     qzTts = insert_data.get("qzTts")
     documentSentimentScore = insert_data.get("documentSentimentScore")
