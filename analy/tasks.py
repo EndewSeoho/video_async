@@ -20,14 +20,14 @@ logger = get_task_logger(__name__)
 
 # @shared_task(bind=True, track_started=True)
 # @background(schedule=10)
-def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
+def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore):
     # request = json.dumps(request)
     # insert_data = json.loads(request)
     # userkey = insert_data.get("userkey")
     # videoNo = insert_data.get("videoNo")
     # videoaddress = insert_data.get("videoaddress")
     komoran = Komoran()
-    a1 = str(a1)
+    a1 = str(stt)
     insert_a1_pos = komoran.pos(a1)
 
     insert_a1_noun = []
@@ -42,8 +42,8 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
     insert_data_noun_non_reduplication = komoran.nouns(a1)
     # print("asdasdaadsad", insert_data_noun2)
 
-    # job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
-    job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    job_Noun = pd.read_csv('C:/Users/withmind/Desktop/video_django - 원본 + zacad/analy/total_Noun_df.csv', encoding='UTF8')
+    # job_Noun = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     # job_Noun(df) 첫열 코드 num 제거
     del job_Noun['Unnamed: 0']
 
@@ -52,7 +52,7 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
         watchfullness = 0
 
     else:
-        jobCode = float(jobCode)
+        jobCode = float(zqCode)
         code = int(jobCode) - 1
         code_Noun = job_Noun.loc[code]
         code_Noun = code_Noun.values.tolist()
@@ -420,7 +420,8 @@ def video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1):
                        right_hand = json.dumps(right_hand_dict), right_hand_time = Right_Hand_time, right_hand_move_count = Right_Hand_count,
                        gaze_x_score = scoring.GAZE_X_scoring(Gaze_value[0]), gaze_y_score = scoring.GAZE_Y_scoring(Gaze_value[1]), shoulder_vertical_score = scoring.SHOULDER_VERTICAL_scoring(vertically_value),
                        shoulder_horizon_score = scoring.SHOULDER_HORIZON_scoring(horizontally_value), face_angle_score = scoring.FACE_ANGLE_scoring(Roll_value), gesture_score = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
-                       watchfullness=watchfullness)
+                       watchfullness=watchfullness, document_sentiment_score=documentSentimentScore, document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb, voice_db_score=voiceDbScore,
+                       voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed, voice_speed_score=voiceSpeedScore,stt=stt, qz_tts=qzTts)
                        # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()

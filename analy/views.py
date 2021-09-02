@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import ImQzAnalysis
+from .models import ImQzFile
 from .serializers import AnalySerializer
 import json
 import cv2
@@ -351,11 +351,24 @@ def post(request):
     userKey = insert_data.get("userKey")
     qzGroup = insert_data.get("qzGroup")
     groupCode = insert_data.get("groupCode")
+    qzNum = insert_data.get("qzNum")
     fileKey = insert_data.get("fileKey")
     fileUrl = insert_data.get("fileUrl")
-    qzNum = insert_data.get("qzNum")
-    jobCode = insert_data.get("jobCode")
-    a1 = insert_data.get("a1")
-    jobCode = str(jobCode)
-    video(userKey, qzGroup, groupCode, fileKey, fileUrl, qzNum, jobCode, a1)
-    return Response("Done", status=200)
+    zqCode = insert_data.get("zqCode")
+    zqCode = str(zqCode)
+    stt = insert_data.get("stt")
+    qzTts = insert_data.get("qzTts")
+    documentSentimentScore = insert_data.get("documentSentimentScore")
+    documentSentimentMagnitude = insert_data.get("documentSentimentMagnitude")
+    voiceDb = insert_data.get("voiceDb")
+    voiceDbScore = insert_data.get("voiceDbScore")
+    voiceTone = insert_data.get("voiceTone")
+    voiceToneScore = insert_data.get("voiceToneScore")
+    voiceSpeed = insert_data.get("voiceSpeed")
+    voiceSpeedScore = insert_data.get("voiceSpeedScore")
+    video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore)
+
+    db_update = ImQzFile.objects.get(file_key=fileKey)
+    db_update.qz_type = 'Y'
+    db_update.save()
+    return Response("OK", status=200)
