@@ -94,9 +94,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         #
         # same_Noun_len = len(same_Noun)
         # input_data_len = len(input_data_set)
-
-        Similarity = same_Noun_len / input_data_len * 40
-        Similarity = round(Similarity, 1)
+        if input_data_len != 0:
+            
+            Similarity = same_Noun_len / input_data_len * 40
+            Similarity = round(Similarity, 1)
+        else :
+            Similarity = 0
 
         # 빈도수 계산 : 형태 Json = [{"str":"Noun","cnt":num},{"str":"Noun","cnt":num},...,{"str":"Noun","cnt":num}]
         same = []
