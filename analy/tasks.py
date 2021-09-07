@@ -214,7 +214,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     lmList_pose = pose_detector.findPosition(img_show)
 
                     # 왼손 추적 22222222
-                    if lmList_pose != 0:
+                    if len(lmList_pose) >= 16:
                         if lmList_pose[15][1] < w and lmList_pose[15][2] < h:
                             Left_hand = [lmList_pose[15][1], lmList_pose[15][2]]
                             Left_Hand_point_list.append(Left_hand)
