@@ -120,9 +120,9 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
-    FPS = cv2.CAP_PROP_FPS
-    w = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
-    h = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
+#     FPS = cv2.CAP_PROP_FPS
+#     w = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
+#     h = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
 #     sound_confirm = soundcheck(fileUrl)
     sound_confirm = 0
 
@@ -164,6 +164,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                 list_Face = []
                 Face_count_list = []
+                image_width = img.shape[1]
+                image_height = img.shape[0]
 
                 # face detection
                 Face_Detection(FD_Net, img, list_Face)
@@ -215,7 +217,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                     # 왼손 추적 22222222
                     if len(lmList_pose) >= 16:
-                        if lmList_pose[15][1] < w and lmList_pose[15][2] < h:
+                        if lmList_pose[15][1] < image_width and lmList_pose[15][2] < image_height:
                             Left_hand = [lmList_pose[15][1], lmList_pose[15][2]]
                             Left_Hand_point_list.append(Left_hand)
                         else:
@@ -225,7 +227,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                             Left_Hand_point_list = []
 
                         # 오른손 추적 22222222
-                        if lmList_pose[16][1] < w and lmList_pose[16][2] < h:
+                        if lmList_pose[16][1] < image_width and lmList_pose[16][2] < image_height:
                             Right_hand = (lmList_pose[16][1], lmList_pose[16][2])
                             Right_Hand_point_list.append(Right_hand)
                         else:
