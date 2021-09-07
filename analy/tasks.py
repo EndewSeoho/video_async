@@ -121,8 +121,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
     FPS = vc.get(cv2.CAP_PROP_FPS)
-    image_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
-    image_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
+#     image_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
+#     image_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
 #     sound_confirm = soundcheck(fileUrl)
     sound_confirm = 0
 
@@ -214,6 +214,9 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     # 동작 검출
                     pose_detector.findPose(img_show)
                     lmList_pose = pose_detector.findPosition(img_show)
+                    
+                    image_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
+                    image_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
                     # 왼손 추적 22222222
                     if len(lmList_pose) >= 16:
