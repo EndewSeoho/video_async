@@ -120,7 +120,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
-#     FPS = cv2.CAP_PROP_FPS
+    FPS = vc.get(cv2.CAP_PROP_FPS)
 #     w = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
 #     h = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
 #     sound_confirm = soundcheck(fileUrl)
