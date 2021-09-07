@@ -165,7 +165,7 @@ def Landmark_Detection(Landmark_Net, cvImg, list_Face, nIndex):
     if xRightTop_in >= xLeftBottom_in:
         INPUT = cvImg[(int(yLeftBottom_in)):(int(yRightTop_in)), (int(xLeftBottom_in)): (int(xRightTop_in))]
     else :
-        INPUT = cvImg[(int(yLeftBottom_in)):(int(yRightTop_in)), (int(xRightTop_in)): (int(xLeftBottom_in))]
+        INPUT = cvImg[(int(yRightTop_in)):(int(yLeftBottom_in)), (int(xRightTop_in)): (int(xLeftBottom_in))]
 
     # 인식 좌표 정보에 얼굴 위치 보정하기 위한 값
     # offsetX = list_ETRIFace[nIndex].rt[0]
