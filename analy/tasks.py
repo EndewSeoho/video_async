@@ -4,7 +4,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 
-from .models import ImQzAnalysis, ImQzAnalysisJobword
+from .models import ImQzAnalysis, ImQzAnalysisJobword, ImQzFile
 from .serializers import AnalySerializer
 import json
 import cv2
@@ -149,7 +149,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # print("1")
     if vc.isOpened() == False:
         bReady = False
-        # print("errorrrrrrrrrr")
+        print("errorrrrrrrrrr")
 
     while (bReady):
         # print("2")
