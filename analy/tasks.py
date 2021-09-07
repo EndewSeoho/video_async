@@ -378,30 +378,61 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
     # 어깨 움직임 결과
     # print("왼쪽어", (Left_shoulder_list))
-    Left_shoulder_max = shoulder_calculate.Left_shoulder_max(Left_shoulder_list)
+    
+    if len(Left_shoulder_list) > 0:
+        
+        Left_shoulder_max = shoulder_calculate.Left_shoulder_max(Left_shoulder_list)
+        Left_shoulder_min = shoulder_calculate.Left_shoulder_min(Left_shoulder_list)
+        shoulder_left_count = Average.shoulder_left_count(shoulder_vertically_left_count)
+    else :
+        Left_shoulder_max = (0, 0)
+        Left_shoulder_min = (0, 0)
+        shoulder_left_count = 0
     # print(Left_shoulder_max)
 
-    Left_shoulder_min = shoulder_calculate.Left_shoulder_min(Left_shoulder_list)
+#     Left_shoulder_min = shoulder_calculate.Left_shoulder_min(Left_shoulder_list)
     # print(Left_shoulder_min)
 
-    shoulder_left_count = Average.shoulder_left_count(shoulder_vertically_left_count)
+#     shoulder_left_count = Average.shoulder_left_count(shoulder_vertically_left_count)
 
-    # print("오른쪽어", Right_shoulder_list)
-    Right_shoulder_max = shoulder_calculate.Right_shoulder_max(Right_shoulder_list)
+    if len(Right_shoulder_list) > 0:
+            # print("오른쪽어", Right_shoulder_list)
+        Right_shoulder_max = shoulder_calculate.Right_shoulder_max(Right_shoulder_list)
     # print(Right_shoulder_max)
 
-    Right_shoulder_min = shoulder_calculate.Right_shoulder_min(Right_shoulder_list)
+        Right_shoulder_min = shoulder_calculate.Right_shoulder_min(Right_shoulder_list)
     # print(Right_shoulder_min)
 
-    shoulder_right_count = Average.shoulder_right_count(shoulder_vertically_right_count)
+        shoulder_right_count = Average.shoulder_right_count(shoulder_vertically_right_count)
+        
+    else :
+        Right_shoulder_max = (0, 0)
+        Right_shoulder_min = (0, 0)
+        shoulder_right_count = 0
+    
+    # print("오른쪽어", Right_shoulder_list)
+#     Right_shoulder_max = shoulder_calculate.Right_shoulder_max(Right_shoulder_list)
+    # print(Right_shoulder_max)
+
+#     Right_shoulder_min = shoulder_calculate.Right_shoulder_min(Right_shoulder_list)
+    # print(Right_shoulder_min)
+
+#     shoulder_right_count = Average.shoulder_right_count(shoulder_vertically_right_count)
 
     # print("가운데어", Center_shoulder_list)
-    Center_shoulder_max = shoulder_calculate.Center_shoulder_max(Center_shoulder_list)
+    
+    if len(Center_shoulder_list) > 0:
+        
+        Center_shoulder_max = shoulder_calculate.Center_shoulder_max(Center_shoulder_list)
     # print(Center_shoulder_max)
 
-    Center_shoulder_min = shoulder_calculate.Center_shoulder_min(Center_shoulder_list)
+        Center_shoulder_min = shoulder_calculate.Center_shoulder_min(Center_shoulder_list)
     # print(Center_shoulder_min)
-
+    else :
+        Center_shoulder_max = (0, 0)
+        Center_shoulder_min = (0, 0)
+    
+    
     # 손
     Left_Hand_time = Left_Hand_time_calculation(Left_Hand_point_result)
     Right_Hand_time = Right_Hand_time_calculation(Right_Hand_point_result)
