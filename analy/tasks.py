@@ -256,8 +256,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                             shoulder_Detector.shoulder_vertically_left(right_shoulder, Landmark_list))
 
                         # 어깨 좌우
-                        shoulder_horizontality_count_value = shoulder_Detector.shoulder_horizontality_count(
-                            center_shoulder_left, Landmark_list)
+                        shoulder_horizontality_count.append(shoulder_Detector.shoulder_horizontality_count(
+                            center_shoulder_left, Landmark_list))
 
                         # 어깨 기울기
                         shoulder_slope_value = shoulder_Detector.shoulder_slope(right_shoulder, left_shoulder)
@@ -427,10 +427,13 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # print(Center_shoulder_max)
 
         Center_shoulder_min = shoulder_calculate.Center_shoulder_min(Center_shoulder_list)
+        shoulder_center_count = (Average.shoulder_left_count(shoulder_horizontality_count[0]), Average.shoulder_left_count(shoulder_horizontality_count[1])
+        
     # print(Center_shoulder_min)
     else :
         Center_shoulder_max = (0, 0)
         Center_shoulder_min = (0, 0)
+        shoulder_center_count = (0, 0)
     
     
     # 손
@@ -456,8 +459,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     #                                             "move_count": shoulder_vertically_right_count},
     #                          "center_shoulder": {"left_spot": Center_shoulder_max,
     #                                              "right_spot": Center_shoulder_min,
-    #                                              "left_move_count": shoulder_horizontality_count_value[0],
-    #                                              "right_move_count": shoulder_horizontality_count_value[1]},
+    #                                              "left_move_count": shoulder_center_count_value[0],
+    #                                              "right_move_count": shoulder_center_count_value[1]},
     #                          "left_hand": {"time": Left_Hand_time, "count": Left_Hand_count,
     #                                        "point": Left_Hand_point_result},
     #                          "right_hand": {"time": Right_Hand_time, "count": Right_Hand_count,
