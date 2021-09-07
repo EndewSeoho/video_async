@@ -121,8 +121,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     pose_detector = pose_Detector()
     vc = cv2.VideoCapture(fileUrl)
     FPS = vc.get(cv2.CAP_PROP_FPS)
-#     w = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
-#     h = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    image_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
+    image_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
 #     sound_confirm = soundcheck(fileUrl)
     sound_confirm = 0
 
@@ -164,8 +164,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                 list_Face = []
                 Face_count_list = []
-                image_width = img.shape[1]
-                image_height = img.shape[0]
+#                 image_width = img.shape[1]
+#                 image_height = img.shape[0]
 
                 # face detection
                 Face_Detection(FD_Net, img, list_Face)
