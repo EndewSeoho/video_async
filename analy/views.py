@@ -371,4 +371,4 @@ def post(request):
     db_update = ImQzFile.objects.get(file_key=fileKey)
     db_update.qz_type = 'Y'
     db_update.save()
-    return Response("OK", status=200)
+    return Response({ msessage : "OK" , status : 200 }, status=200)
