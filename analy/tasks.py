@@ -428,14 +428,11 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
         Center_shoulder_min = shoulder_calculate.Center_shoulder_min(Center_shoulder_list)
         shoulder_center_count = (Average.shoulder_left_count(shoulder_horizontality_count[0]), Average.shoulder_left_count(shoulder_horizontality_count[1])
-        
     # print(Center_shoulder_min)
-    else :
-        Center_shoulder_max = (0, 0)
-        Center_shoulder_min = (0, 0)
-        shoulder_center_count = (0, 0)
-    
-    
+    else : Center_shoulder_max = (0, 0)
+           Center_shoulder_min = (0, 0)
+           shoulder_center_count = (0, 0)
+     
     # 손
     Left_Hand_time = Left_Hand_time_calculation(Left_Hand_point_result)
     Right_Hand_time = Right_Hand_time_calculation(Right_Hand_point_result)
