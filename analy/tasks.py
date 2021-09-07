@@ -464,7 +464,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     #                                         "point": Right_Hand_point_result}}
 
     # 점수화_표준편차
-    Gaze_value = Average.Gaze_Avg(Gaze_list)
+    if len(Gaze_list) > 0:
+        
+        Gaze_value = Average.Gaze_Avg(Gaze_list)
+        
+    else :
+        Gaze_value = 0
     Roll_value = Roll_mean_value
     Shoulder_velue = Shoulder_slope_mean_value
     vertically_value = Average.vertically_Avg(Left_shoulder_max,
