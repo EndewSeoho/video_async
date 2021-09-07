@@ -359,11 +359,21 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # print(len(Gaze_list))
 
     # 얼굴 각도 결과
-    Roll_mean_value = shoulder_Detector.Roll_slope_mean(Roll_list)
+    if len(Roll_list) > 0:
+        
+        Roll_mean_value = shoulder_Detector.Roll_slope_mean(Roll_list)
+    else :
+        Roll_mean_value = 0
     # print(Roll_mean_value)
 
     # 어깨 각도 결과
-    Shoulder_slope_mean_value = shoulder_Detector.Shoulder_slope_mean(Shoulder_slope_list)
+    
+    if len(Shoulder_slope_list) > 0:
+        
+        Shoulder_slope_mean_value = shoulder_Detector.Shoulder_slope_mean(Shoulder_slope_list)
+        
+    else :
+        Shoulder_slope_mean_value = 0
     # print(Shoulder_slope_mean_value)
 
     # 어깨 움직임 결과
