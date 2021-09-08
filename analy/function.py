@@ -1,13 +1,14 @@
-import cv2
 from torch.autograd import Variable
 from torchvision import transforms
 from .preprocessing import faceAlignment
 from PIL import Image
-
-from .deep_model import *
 from .apps import *
 from moviepy.editor import *
 import librosa
+import numpy as np
+import mediapipe as mp
+import pandas as pd
+import csv
 
 # device 설정. CUDA 사용가능하면 CUDA 모드로, 못 쓰면 CPU 모드로 동작
 # 단 cpu로 연산 할 경우 인식 함수 내 코드 수정 필요.
@@ -324,64 +325,6 @@ def Gaze_Regression(list_Face, nIndex):
 
     return list_Face[nIndex].ptLED, list_Face[nIndex].ptRED
 
-
-import mediapipe as mp
-
-class hand_Detector():
-    def __init__(self, mode=False, maxHands=2, detectionCon=0.85, trackCon=0.5):
-        self.mode = mode
-        self.maxHands = maxHands
-        self.detectionCon = detectionCon
-        self.trackCon = trackCon
-
-        self.mpHands = mp.solutions.hands
-        self.hands = self.mpHands.Hands(self.mode, self.maxHands,
-                                        self.detectionCon, self.trackCon)
-        self.mpDraw = mp.solutions.drawing_utils
-        self.tipIds = [4, 8, 12, 16, 20]
-
-    def findHands(self, img, draw=True):
-        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(imgRGB)
-
-        if self.results.multi_hand_landmarks:
-            for handLms in self.results.multi_hand_landmarks:
-                if draw:
-                    self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)
-
-        return img
-
-    def find_Hand_Position(self, img, handNo=0, draw=True):
-
-        self.lmlist = []
-        if self.results.multi_hand_landmarks:
-            myHand = self.results.multi_hand_landmarks[handNo]
-            for id, lm in enumerate(myHand.landmark):
-                h, w, c = img.shape
-                cx, cy = int(lm.x * w), int(lm.y * h)
-                self.lmlist.append([id, cx, cy])
-                if draw:
-                    cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
-        return self.lmlist
-
-    def fingersUp(self):
-        fingers = []
-
-        if self.lmlist[self.tipIds[0]][1] < self.lmlist[self.tipIds[0] - 1][1]:
-            fingers.append(1)
-
-        else:
-            fingers.append(0)
-
-
-        for id in range(0, 5):
-            if self.lmlist[self.tipIds[id]][2] < self.lmlist[self.tipIds[id] - 2][2]:
-                fingers.append(1)
-            else:
-                fingers.append(0)
-
-        return fingers
-
 class pose_Detector():
 
     def __init__(self, mode=False, upBody=False, smooth=True, detectionCon=0.7, trackCon=0.5):
@@ -408,11 +351,11 @@ class pose_Detector():
 
         return img
 
-    def gaze_Detecor(self, img_show):
-        if self != None:
+    def gaze_Detector(self, gaze, img_show):
+        if gaze != None:
             # print("gaze", gaze)
-            center_gaze_x = (self[0][0] + self[1][0]) / 2
-            center_gaze_y = (self[0][1] + self[1][1]) / 2
+            center_gaze_x = (gaze[0][0] + gaze[1][0]) / 2
+            center_gaze_y = (gaze[0][1] + gaze[1][1]) / 2
             cv2.circle(img_show, (int(center_gaze_x), int(center_gaze_y)), 8, (0, 0, 255), -1)
             center_gaze = (int(center_gaze_x), int(center_gaze_y))
             return center_gaze
@@ -434,8 +377,8 @@ def soundcheck(self):
     sound = AudioFileClip(self)  # self = .mp4
 
     shortsound = sound.subclip("00:00:01", "00:00:10")  # audio from 1 to 10 seconds
-    # fileroute = 'C:/Users/withmind/Desktop/'
-    fileroute = '/home/ubuntu/project/'
+    fileroute = 'C:/Users/withmind/Desktop/'
+    # fileroute = '/home/ubuntu/project/'
     filename = 'sound.wav'
     shortsound.write_audiofile(fileroute + filename, 44100, 2, 2000, "pcm_s32le")
 
@@ -458,175 +401,66 @@ def soundcheck(self):
 
     return sound_result
 
+class shoulder_movement:
+    def shoulder_vertically(shoulder, Landmark_list):
+        landmark_no7_y = Landmark_list[13]
+        shoulder_move_list = []
+        shoulder_move_count = 0
 
-class shoulder_Detector:
-    # 어깨 상하
-    def shoulder_vertically_left(left_shoulder, Landmark_list):
-        # 랜드마크 리스트(5번) / 어깨 위아래 움직임 체크 기준
-        landmark_no5_y = Landmark_list[9]
-        Left_shoulder_move_list = []
-        Left_shoulder_move_count = 0
-
-        if left_shoulder[1] >= landmark_no5_y:
-            Left_shoulder_move_list.append(left_shoulder[1])
+        if shoulder[1] >= landmark_no7_y:
+            shoulder_move_list.append(1)
         else:
-            if len(Left_shoulder_move_list) > 3:
-                Left_shoulder_move_count += 1
+            if len(shoulder_move_list) > 3:
+                shoulder_move_count = 1
+            shoulder_move_list = []
 
-        return Left_shoulder_move_count
+        return shoulder_move_count
 
-    def shoulder_vertically_right(right_shoulder, Landmark_list):
-        # 랜드마크 리스트(5번) / 어깨 위아래 움직임 체크 기준
-        landmark_no5_y = Landmark_list[9]
+    def shoulder_horizontally(shoulder, Landmark_list):
+        landmark_no5_x = Landmark_list[8]
+        landmark_no13_x = Landmark_list[24]
+        shoulder_left_move_list = []
+        shoulder_left_move_count = 0
+        shoulder_right_move_list = []
+        shoulder_right_move_count = 0
 
-        Right_shoulder_move_list = []
-        Right_shoulder_move_count = 0
+        if shoulder[0] <= landmark_no5_x:
+            shoulder_left_move_list.append(1)
 
-        if right_shoulder[1] >= landmark_no5_y:
-            Right_shoulder_move_list.append(right_shoulder[1])
+        elif shoulder[0] >= landmark_no13_x:
+            shoulder_right_move_list.append(1)
+
         else:
-            if len(Right_shoulder_move_list) > 3:
-                Right_shoulder_move_count += 1
+            if len(shoulder_left_move_list) > 3:
+                shoulder_left_move_count = 1
+            if len(shoulder_right_move_list) > 3:
+                shoulder_right_move_count = 1
 
-            return Right_shoulder_move_count
+        return (shoulder_left_move_count, shoulder_right_move_count)
 
-    # 어깨 좌우 움직임 count
-    def shoulder_horizontality_count(center_shoulder_left, Landmark_list):
-        # 랜드마크 리스트(1번, 17번) / 어깨 좌우 움직임 체크 기준
-        landmark_no1_x = Landmark_list[0]
-        landmark_no17_x = Landmark_list[32]
+    def shoulder_vertical_low_high(shoulder_list):
+        shoulder_low_y = max(t[1] for t in shoulder_list)
+        shoulder_high_y = min(t[1] for t in shoulder_list)
+        for x, y in enumerate(shoulder_list):
+            if shoulder_low_y in y:
+                shoulder_low_point = y
+            if shoulder_high_y in y:
+                shoulder_high_point = y
 
-        Center_shoulder_left_move_list = []
-        Center_shoulder_left_move_count = 0
+        return (shoulder_low_point , shoulder_high_point)
 
-        if center_shoulder_left <= landmark_no1_x:
-            Center_shoulder_left_move_list.append(center_shoulder_left)
-        else:
-            if len(Center_shoulder_left_move_list) > 3:
-                Center_shoulder_left_move_count += 1
+    def shoulder_horizon_left_right(shoulder_list):
+        shoulder_left_x = min(t[0] for t in shoulder_list)
+        shoulder_right_x = max(t[0] for t in shoulder_list)
 
-        Center_shoulder_right_move_list = []
-        Center_shoulder_right_move_count = 0
+        for x, y in enumerate(shoulder_list):
+            if shoulder_left_x in y:
+                shoulder_extreme_left_point = y
+            if shoulder_right_x in y:
+                shoulder_extreme_right_point = y
 
-        if center_shoulder_left >= landmark_no17_x:
-            Center_shoulder_right_move_list.append(center_shoulder_left)
-        else:
-            if len(Center_shoulder_right_move_list) > 3:
-                Center_shoulder_right_move_count += 1
+        return (shoulder_extreme_left_point, shoulder_extreme_right_point)
 
-        return Center_shoulder_left_move_count, Center_shoulder_right_move_count
-
-    # 어깨 기울기
-    def shoulder_slope(right_shoulder, left_shoulder):
-        if right_shoulder[0] != left_shoulder[0]:
-            shoulder_slope = (right_shoulder[1] - left_shoulder[1]) / (right_shoulder[0] - left_shoulder[0])
-        else:
-            shoulder_slope = 0
-
-        return shoulder_slope
-
-    # 얼굴 각도 결과
-    def Roll_slope_mean(Roll_list):
-        Roll_sum = 0
-        for ii in range(len(Roll_list)):
-            Roll_sum = Roll_sum + Roll_list[ii]
-        Roll_slope_mean = Roll_sum / len(Roll_list)
-
-        return Roll_slope_mean
-
-    # 어깨 각도 결과
-    def Shoulder_slope_mean(Shoulder_slope_list):
-        Shoulder_slope_sum = 0
-        for iii in range(len(Shoulder_slope_list)):
-            Shoulder_slope_sum = Shoulder_slope_sum + Shoulder_slope_list[iii]
-        Shoulder_slope_mean = Shoulder_slope_sum / len(Shoulder_slope_list)
-        # print("어깨 각도 평균", Shoulder_slope_mean)
-
-        return Shoulder_slope_mean
-
-
-# 어깨 움직임 결과
-class shoulder_calculate:
-    # print("왼쪽어", (Left_shoulder_list))
-    def Left_shoulder_max(Left_shoulder_list):
-        Left_shoulder_max_y = max(t[1] for t in Left_shoulder_list)
-        for x, y in enumerate(Left_shoulder_list):
-            if Left_shoulder_max_y in y:
-                Left_shoulder_max = y
-        # print(Left_shoulder_max)
-
-        return Left_shoulder_max
-
-
-    def Left_shoulder_min(Left_shoulder_list):
-        Left_shoulder_min_y = min(t[1] for t in Left_shoulder_list)
-        for x, y in enumerate(Left_shoulder_list):
-            if Left_shoulder_min_y in y:
-                Left_shoulder_min = y
-        # print(Left_shoulder_min)
-
-        return Left_shoulder_min
-
-    # print("오른쪽어", Right_shoulder_list)
-
-    def Right_shoulder_max(Right_shoulder_list):
-        Right_shoulder_max_y = max(t[1] for t in Right_shoulder_list)
-        for x, y in enumerate(Right_shoulder_list):
-            if Right_shoulder_max_y in y:
-                Right_shoulder_max = y
-        # print(Right_shoulder_max)
-
-        return Right_shoulder_max
-
-
-    def Right_shoulder_min(Right_shoulder_list):
-        Right_shoulder_min_y = min(t[1] for t in Right_shoulder_list)
-        for x, y in enumerate(Right_shoulder_list):
-            if Right_shoulder_min_y in y:
-                Right_shoulder_min = y
-        # print(Right_shoulder_min)
-
-        return Right_shoulder_min
-
-
-    # print("가운데어", Center_shoulder_list)
-    def Center_shoulder_max(Center_shoulder_list):
-        Center_shoulder_max_x = max(t[0] for t in Center_shoulder_list)
-        for x, y in enumerate(Center_shoulder_list):
-            if Center_shoulder_max_x in y:
-                Center_shoulder_max = y
-        # print(Center_shoulder_max)
-
-        return Center_shoulder_max
-
-
-    def Center_shoulder_min(Center_shoulder_list):
-        Center_shoulder_min_x = min(t[0] for t in Center_shoulder_list)
-        for x, y in enumerate(Center_shoulder_list):
-            if Center_shoulder_min_x in y:
-                Center_shoulder_min = y
-        # print(Center_shoulder_min)
-
-        return Center_shoulder_min
-
-
-# 제스처 시간
-def Left_Hand_time_calculation(Left_Hand_point_result):
-    Left_Hand_time = float(len(Left_Hand_point_result) / 6)
-
-    return Left_Hand_time
-
-
-def Right_Hand_time_calculation(Right_Hand_point_result):
-    Right_Hand_time = float(len(Right_Hand_point_result) / 6)
-
-    return Right_Hand_time
-
-
-# 분석 _ Average(표준편차 계산및 CSV 파일 저장)
-import pandas as pd
-import numpy as np
-import csv
 
 class Average:
     # Gaze 표준편차 / Gaze_Avg = [x_std, y_std] 리스트안 튜플
@@ -641,9 +475,9 @@ class Average:
         return GazeAvg_x,  GazeAvg_y
 
     # 어깨 상하 최고 길이 도출
-    def vertically_Avg(Left_shoulder_max, Left_shoulder_min, Right_shoulder_max, Right_shoulder_min):
-        Left_shoulder = Left_shoulder_max[1] - Left_shoulder_min[1]
-        Right_shoulder = Right_shoulder_max[1] - Right_shoulder_min[1]
+    def vertically_Avg(Left_shoulder_high, Left_shoulder_low, Right_shoulder_high, Right_shoulder_low):
+        Left_shoulder = Left_shoulder_high[1] - Left_shoulder_low[1]
+        Right_shoulder = Right_shoulder_high[1] - Right_shoulder_low[1]
 
         if Left_shoulder > Right_shoulder:
             return Left_shoulder
@@ -651,8 +485,12 @@ class Average:
             return Right_shoulder
 
     # 어깨 좌우 최고 길이 도출
-    def horizontally_Avg(Center_shoulder_max, Center_shoulder_min):
-        horizontally = Center_shoulder_max[0] - Center_shoulder_min[0]
+    def horizontally_Avg(Center_shoulder_extreme_right, Center_shoulder_extreme_left):
+
+        if Center_shoulder_extreme_right[0] >= Center_shoulder_extreme_left[0]:
+            horizontally = Center_shoulder_extreme_right[0] - Center_shoulder_extreme_left[0]
+        else:
+            horizontally = Center_shoulder_extreme_left[0] - Center_shoulder_extreme_right[0]
 
         return horizontally
 
@@ -685,31 +523,31 @@ class Average:
             return Right_Hand
 
 
-    def Average_csv(Gaze_value, Roll_value, Shoulder_value,vertically_value, horizontally_value, GestureTIME_value):
-        # ftp = FTP()
-        #
-        # ftp.connect('withmind.cache.smilecdn.com', 21)
-        # ftp.login('withmind', 'dnlemakdlsem1!')
-        # ftp.cwd('./analy_result')
-        filename = '/Average.csv'
-        # fileroute = 'C:/Users/withmind/Desktop'
-        fileroute = '/home/ubuntu/project'
-
-        # CSV 누적
-        headersCSV = ['Gaze', 'Roll', 'Shoulder', 'vertically', 'horizontally', 'GestureTIME']
-        dict = {'Gaze': Gaze_value,
-                'Roll': Roll_value,
-                'Shoulder': Shoulder_value,
-                'vertically': vertically_value,
-                'horizontally': horizontally_value,
-                'GestureTIME': GestureTIME_value
-                }
-
-        with open(fileroute + filename, mode='a', encoding='utf-8', newline='') as csvfile:
-            wr = csv.DictWriter(csvfile, fieldnames=headersCSV)
-            wr.writerow(dict)
-
-        os.remove(fileroute + filename)
+    # def Average_csv(Gaze_value, Roll_value, Shoulder_value,vertically_value, horizontally_value, GestureTIME_value):
+    #     # ftp = FTP()
+    #     #
+    #     # ftp.connect('withmind.cache.smilecdn.com', 21)
+    #     # ftp.login('withmind', 'dnlemakdlsem1!')
+    #     # ftp.cwd('./analy_result')
+    #     filename = '/Average.csv'
+    #     # fileroute = 'C:/Users/withmind/Desktop'
+    #     fileroute = '/home/ubuntu/project'
+    #
+    #     # CSV 누적
+    #     headersCSV = ['Gaze', 'Roll', 'Shoulder', 'vertically', 'horizontally', 'GestureTIME']
+    #     dict = {'Gaze': Gaze_value,
+    #             'Roll': Roll_value,
+    #             'Shoulder': Shoulder_value,
+    #             'vertically': vertically_value,
+    #             'horizontally': horizontally_value,
+    #             'GestureTIME': GestureTIME_value
+    #             }
+    #
+    #     with open(fileroute + filename, mode='a', encoding='utf-8', newline='') as csvfile:
+    #         wr = csv.DictWriter(csvfile, fieldnames=headersCSV)
+    #         wr.writerow(dict)
+    #
+    #     os.remove(fileroute + filename)
 
 
 
@@ -818,6 +656,3 @@ class scoring:
             return 80
         else:
             return 100
-
-
-

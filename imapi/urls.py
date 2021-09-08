@@ -16,6 +16,7 @@ Including another URLconf
 from django.urls import path, include
 from django.contrib import admin
 
+# handler500 = 'analy.views.handler500'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('analy.urls'))

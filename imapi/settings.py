@@ -23,11 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+*o)z4qy^27&#pqpy+1gt+pq%_zbyj137j$ly$+hh@x0jak9^w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    '115.85.183.186',
-                 '*',]
+    # '115.85.183.186',
+                 '*',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -129,6 +132,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# REST_FRAMEWORK = {
+#     'EXCEPTION_HANDLER': 'video_analy.video_async.imapi.utils.custom_exception_handler'
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -153,3 +159,4 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
