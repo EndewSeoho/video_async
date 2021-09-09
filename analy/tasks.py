@@ -106,16 +106,16 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         ret, frame = vc.read()
 
         if ret:
-            if (frame_num == 1):
-                standard_frame = cv2.flip(frame, 1)
-                standard_img = standard_frame
-
-                standard_list_Face = []
-                standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
-                if len(standard_list_Face) > 0:
-                    standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
-                # frame_num += 1
-                # print('000000000000000000', frame_num)
+            # if (frame_num == 1):
+            #     standard_frame = cv2.flip(frame, 1)
+            #     standard_img = standard_frame
+            #
+            #     standard_list_Face = []
+            #     standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
+            #     if len(standard_list_Face) > 0:
+            #         standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
+            #     # frame_num += 1
+            #     # print('000000000000000000', frame_num)
 
             if (frame_num % 5 == 0):
 
@@ -132,7 +132,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                     #랜드마크 분석
                     Landmark_list = Landmark_Detection(Landmark_Net, img, list_Face, 0)
-                    if Landmark_list != 1:
+                    if len(Landmark_list) > 0:
 
                         #머리 각도 분석
                         Headpose = HeadPose_Estimation(Headpose_Net, img, list_Face, 0)
@@ -187,14 +187,14 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                             Center_shoulder_point_list.append(center_shoulder_point)
 
                             # 어깨 움직임
-                            if len(standard_Landmark_list) != 0:
+                            if len(Landmark_list) != 0:
                                 left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                    left_shoulder_point, standard_Landmark_list)
+                                    left_shoulder_point, Landmark_list)
                                 right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                    right_shoulder_point, standard_Landmark_list)
+                                    right_shoulder_point, Landmark_list)
 
 
-                                center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
+                                center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, Landmark_list)
                                 center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
                                 center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
 
