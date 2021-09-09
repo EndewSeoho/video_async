@@ -32,29 +32,29 @@ class ImConfig(AppConfig):
             new_dict[new_key] = origin_dict[temp_key]
         return new_dict
 
-    FD_Net = cv2.dnn.readNetFromCaffe("C:/Users/withmind/Desktop/models/opencv_ssd.prototxt", "C:/Users/withmind/Desktop/models/opencv_ssd.caffemodel")
-    # FD_Net = cv2.dnn.readNetFromCaffe("/home/ubuntu/project/models/opencv_ssd.prototxt",
-    #                                   "/home/ubuntu/project/models/opencv_ssd.caffemodel")
+    # FD_Net = cv2.dnn.readNetFromCaffe("C:/Users/withmind/Desktop/models/opencv_ssd.prototxt", "C:/Users/withmind/Desktop/models/opencv_ssd.caffemodel")
+    FD_Net = cv2.dnn.readNetFromCaffe("/home/ubuntu/project/models/opencv_ssd.prototxt",
+                                      "/home/ubuntu/project/models/opencv_ssd.caffemodel")
 
 
 
     Landmark_Net = LandmarkNet(3, 3)
     # Landmark_Net = torch.nn.DataParallel(Landmark_Net).to(device)
     Landmark_Net = Landmark_Net.to(device)
-    Landmark_Net.load_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)['state_dict'])
-    # Landmark_Net.load_state_dict(
-    #     torch.load("/home/ubuntu/project/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)[
-    #         'state_dict'])
+    # Landmark_Net.load_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)['state_dict'])
+    Landmark_Net.load_state_dict(
+        torch.load("/home/ubuntu/project/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)[
+            'state_dict'])
 
 
 
     Headpose_Net = HeadposeNet(torchvision.models.resnet.Bottleneck, [3, 4, 6, 3], 66)
     Headpose_Net = Headpose_Net.to(device)
-    Headpose_Net.load_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_HEAD_POSE.pth.tar"))
-    # Headpose_Net.load_state_dict(torch.load("/home/ubuntu/project/models/ETRI_HEAD_POSE.pth.tar"))
+    # Headpose_Net.load_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_HEAD_POSE.pth.tar"))
+    Headpose_Net.load_state_dict(torch.load("/home/ubuntu/project/models/ETRI_HEAD_POSE.pth.tar"))
 
 
     Emotion_Net = EmotionNet(num_classes=7).to(device)
-    new_dict = get_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_Emotion.pth.tar")['state_dict'])
-    # new_dict = get_state_dict(torch.load("/home/ubuntu/project/models/ETRI_EMOTION.pth.tar")['state_dict'])
+    # new_dict = get_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_Emotion.pth.tar")['state_dict'])
+    new_dict = get_state_dict(torch.load("/home/ubuntu/project/models/ETRI_EMOTION.pth.tar")['state_dict'])
     # Emotion_Net.load_state_dict(new_dict)
