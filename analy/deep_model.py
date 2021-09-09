@@ -91,6 +91,7 @@ class network_29layers_v2_Emotion(nn.Module):
         out = self.fcOut(x)
         return out
 
+
 def EmotionNet(**kwargs):
     model = network_29layers_v2_Emotion(resblock, [1, 2, 3, 4], **kwargs)
     return model

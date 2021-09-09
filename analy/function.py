@@ -279,25 +279,26 @@ def list2SoftList(srcList):
     return srcList
 
 def Emotion_Classification(Emotion_Net, cvImg, list_Face, nIndex):
-
     if list_Face[nIndex].ptLE == [-1, -1]:
         return -1
 
+    # 정규화 얼굴영역 이미지 생성
     img = cvImg.copy()
-
     ROIImg = faceAlignment(img, list_Face[nIndex].ptLE, list_Face[nIndex].ptRE
                            , list_Face[nIndex].ptLM, list_Face[nIndex].ptLM)
 
+    # image preprocessing
     PILROI = Image.fromarray(ROIImg)
-
     transformedImg = transformations_emotionnet(PILROI)
     transformedImg = torch.unsqueeze(transformedImg, 0)
     transformedImg = transformedImg.to(device)
+
+    # emotion-net feedforward processing
     output_glasses = Emotion_Net(transformedImg)
 
+    # 출력 결과 확률로 변환
     output_cpu = output_glasses.cpu().detach().numpy().squeeze()
-    output = list2SoftList(output_cpu)
-    output = output.tolist()
+    output = list2SoftList(output_cpu).tolist()
 
     # emotion label
     # surprise, fear, disgust, happy, sadness, angry, neutral
@@ -305,7 +306,7 @@ def Emotion_Classification(Emotion_Net, cvImg, list_Face, nIndex):
     for ii in range(7):
         list_Face[nIndex].fEmotionScore[ii] = output[ii]
 
-    torch.cuda.empty_cache()
+    # torch.cuda.empty_cache()
 
 def Gaze_Regression(list_Face, nIndex):
     if list_Face[nIndex].ptLE == [-1, -1] or list_Face[nIndex].fYaw == -1:

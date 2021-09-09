@@ -15,12 +15,7 @@ def faceAlignment(img, ptLE, ptRE, ptLM, ptRM):
     if min(ptLM[1], ptRM[1]) < min(ptLE[1], ptRE[1]):
         understand = True
 
-#     margin = (ptRE[0] - ptLE[0])
-
-    if ptRE[0] >= ptLE[0]:
-        margin = (ptRE[0] - ptLE[0])
-    if ptRE[0] < ptLE[0]:
-        margin = (ptLE[0] - ptRE[0])
+    margin = max(ptRE[0] - ptLE[0],30)
     marginImg = cv.copyMakeBorder(tImg, margin, margin, margin, margin, cv.BORDER_CONSTANT, 0)
     ptLE = (ptLE[0] + margin, ptLE[1] + margin)
     ptRE = (ptRE[0] + margin, ptRE[1] + margin)

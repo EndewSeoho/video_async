@@ -72,7 +72,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     video_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
     video_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
     # sound_confirm = soundcheck(fileUrl)
-    sound_confirm = 1
+    sound_confirm = 0
 
     # 데이터 담을 리스트
     Face_count_list = []
@@ -111,23 +111,23 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                 standard_img = standard_frame
 
                 standard_list_Face = []
-                Face_Detection(FD_Net, standard_img, standard_list_Face)
+                standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
                 if len(standard_list_Face) > 0:
                     standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
                 # frame_num += 1
-                # print('000000000000000000', frame_num)
+                print('000000000000000000', frame_num)
 
             if (frame_num % 5 == 0):
+
                 frame = cv2.flip(frame, 1)
                 img = frame
-
                 list_Face = []
-
+                # cv2.imwrite('frame%d.png' % frame_num, frame)
                 Face_Detection(FD_Net, img, list_Face)
                 Face_count_list.append(len(list_Face))
                 # print('111111111111111111111', frame_num)
 
-                # print("asdasada", list_Face)
+                # print("asdasada", len(list_Face))
                 if len(list_Face) > 0:
 
                     #랜드마크 분석
@@ -138,8 +138,11 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     Roll_list.append(roll)
                     #감정분석
                     Emotion_Classification(Emotion_Net, img, list_Face, 0)
-                    EmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
+                    # sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
+                    # sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
                     EmotionResult = list_Face[0].fEmotionScore
+                    print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
+
                     Emotion_list.append(EmotionResult)
                     #시선분석
                     gaze = Gaze_Regression(list_Face, 0)
@@ -210,6 +213,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                         #     # 어깨 기울기
                         #     shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
                         #     Shoulder_slope_list.append(shoulder_slope)
+                else:
+                    continue
 
             frame_num += 1
         else:
@@ -231,20 +236,20 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     Emotion_neutral = 0
 
     for i in range(len(Emotion_list)):
-        # Emotion_surprise = Emotion_surprise + Emotion_list[i][0]
-        # Emotion_fear = Emotion_fear + Emotion_list[i][1]
-        # Emotion_aversion = Emotion_aversion + Emotion_list[i][2]
-        # Emotion_happy = Emotion_happy + Emotion_list[i][3]
-        # Emotion_sadness = Emotion_sadness + Emotion_list[i][4]
-        # Emotion_angry = Emotion_angry + Emotion_list[i][5]
-        # Emotion_neutral = Emotion_neutral + Emotion_list[i][6]
-        Emotion_surprise += Emotion_list[i][0]
-        Emotion_fear += Emotion_list[i][1]
-        Emotion_aversion += Emotion_list[i][2]
-        Emotion_happy += Emotion_list[i][3]
-        Emotion_sadness += Emotion_list[i][4]
-        Emotion_angry += Emotion_list[i][5]
-        Emotion_neutral += Emotion_list[i][6]
+        Emotion_surprise = Emotion_surprise + Emotion_list[i][0]
+        Emotion_fear = Emotion_fear + Emotion_list[i][1]
+        Emotion_aversion = Emotion_aversion + Emotion_list[i][2]
+        Emotion_happy = Emotion_happy + Emotion_list[i][3]
+        Emotion_sadness = Emotion_sadness + Emotion_list[i][4]
+        Emotion_angry = Emotion_angry + Emotion_list[i][5]
+        Emotion_neutral = Emotion_neutral + Emotion_list[i][6]
+        # Emotion_surprise += Emotion_list[i][0]
+        # Emotion_fear += Emotion_list[i][1]
+        # Emotion_aversion += Emotion_list[i][2]
+        # Emotion_happy += Emotion_list[i][3]
+        # Emotion_sadness += Emotion_list[i][4]
+        # Emotion_angry += Emotion_list[i][5]
+        # Emotion_neutral += Emotion_list[i][6]
 
     if len(Emotion_list) != 0:
         if Emotion_surprise != 0:

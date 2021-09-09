@@ -57,4 +57,4 @@ class ImConfig(AppConfig):
     Emotion_Net = EmotionNet(num_classes=7).to(device)
     # new_dict = get_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_Emotion.pth.tar")['state_dict'])
     new_dict = get_state_dict(torch.load("/home/ubuntu/project/models/ETRI_EMOTION.pth.tar")['state_dict'])
-    # Emotion_Net.load_state_dict(new_dict)
+    Emotion_Net.load_state_dict(new_dict)
