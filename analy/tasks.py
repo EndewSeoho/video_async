@@ -11,7 +11,7 @@ logger = get_task_logger(__name__)
 
 
 def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore,
-          documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore):
+          documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullness_type):
     komoran = Komoran()
     stt = str(stt)
     input_pos = komoran.pos(stt)
@@ -21,8 +21,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
 
-    # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
-    job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
+    # job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
 
     code_noun = job_noun_file.loc[zqCode]
@@ -39,15 +39,30 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         noun_result = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
         noun_result.save
 
-    if qzNum == 1:
-        watchfullness = 0
-    else:
-        if len(input_data_set) != 0:
-            Similarity = round(len(intersection_noun) * 40 / len(input_data_set), 1)
+
+    if len(input_data_set) != 0 :
+        if watchfullness_type == 1 :
+            if qzNum == 1:
+                Similarity = 0
+            else:
+                Similarity = round(len(intersection_noun) * 40 / len(input_data_set), 1)
         else:
             Similarity = 0
+    else :
+        Similarity = 0
 
-        watchfullness = Similarity
+    # if watchfullness_type == 1:
+    #     if qzNum == 1:
+    #         Similarity = 0
+    #     else:
+    #         if len(input_data_set) != 0:
+    #             Similarity = round(len(intersection_noun) * 40 / len(input_data_set), 1)
+    #         else:
+    #             Similarity = 0
+    # else:
+    #     Similarity = 0
+
+    watchfullness = Similarity
 
     FD_Net, Landmark_Net, Headpose_Net, Emotion_Net = Initialization()
 
@@ -213,13 +228,21 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     Emotion_neutral = 0
 
     for i in range(len(Emotion_list)):
-        Emotion_surprise = Emotion_surprise + Emotion_list[i][0]
-        Emotion_fear = Emotion_fear + Emotion_list[i][1]
-        Emotion_aversion = Emotion_aversion + Emotion_list[i][2]
-        Emotion_happy = Emotion_happy + Emotion_list[i][3]
-        Emotion_sadness = Emotion_sadness + Emotion_list[i][4]
-        Emotion_angry = Emotion_angry + Emotion_list[i][5]
-        Emotion_neutral = Emotion_neutral + Emotion_list[i][6]
+        # Emotion_surprise = Emotion_surprise + Emotion_list[i][0]
+        # Emotion_fear = Emotion_fear + Emotion_list[i][1]
+        # Emotion_aversion = Emotion_aversion + Emotion_list[i][2]
+        # Emotion_happy = Emotion_happy + Emotion_list[i][3]
+        # Emotion_sadness = Emotion_sadness + Emotion_list[i][4]
+        # Emotion_angry = Emotion_angry + Emotion_list[i][5]
+        # Emotion_neutral = Emotion_neutral + Emotion_list[i][6]
+        Emotion_surprise += Emotion_list[i][0]
+        Emotion_fear += Emotion_list[i][1]
+        Emotion_aversion += Emotion_list[i][2]
+        Emotion_happy += Emotion_list[i][3]
+        Emotion_sadness += Emotion_list[i][4]
+        Emotion_angry += Emotion_list[i][5]
+        Emotion_neutral += Emotion_list[i][6]
+
     if len(Emotion_list) != 0:
         if Emotion_surprise != 0:
             Emotion_surprise_mean = Emotion_surprise * 100 / len(Emotion_list)
@@ -232,7 +255,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         if Emotion_aversion != 0:
             Emotion_aversion_mean = Emotion_aversion * 100 / len(Emotion_list)
         else:
-            Emotion_disgust_mean = 0
+            Emotion_aversion_mean = 0
         if Emotion_happy != 0:
             Emotion_happy_mean = Emotion_happy * 100 / len(Emotion_list)
         else:
@@ -270,7 +293,9 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
     else:
         Shoulder_slope_mean_value = 0
-
+    # print("왼쪽어깨", Left_shoulder_point_list)
+    # print("오른쪽어깨", Right_shoulder_point_list)
+    # print("어깨가운데", Center_shoulder_point_list)
     if len(Left_shoulder_point_list) != 0:
         left_shoulder_cal = shoulder_movement.shoulder_vertical_low_high(Left_shoulder_point_list)
         Left_shoulder_low = left_shoulder_cal[0]
@@ -314,8 +339,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                                                    Left_shoulder_low,
                                                                    Right_shoulder_high,
                                                                    Right_shoulder_low)
-    print("asd", Center_shoulder_extreme_right)
-    print("Asdasd", Center_shoulder_extreme_left)
+    # print("asd", Center_shoulder_extreme_right)
+    # print("Asdasd", Center_shoulder_extreme_left)
     shoulder_horizontally_max_length_value = Average.horizontally_Avg(Center_shoulder_extreme_right, Center_shoulder_extreme_left)
     # GestureTIME_value = Average.GestureTIME(Left_Hand_time, Right_Hand_time)
 
@@ -356,7 +381,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                        document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
                        voice_db_score=voiceDbScore,
                        voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed,
-                       voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts)
+                       voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts, watchfullness_type=watchfullness_type)
     # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()

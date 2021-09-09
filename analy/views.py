@@ -23,6 +23,7 @@ def post(request):
     fileKey = insert_data.get("fileKey")
     fileUrl = insert_data.get("fileUrl")
     zqCode = insert_data.get("zqCode")
+    watchfullness_type = insert_data.get("watchfullness_type")
     # zqCode = str(zqCode)
     stt = insert_data.get("stt")
     qzTts = insert_data.get("qzTts")
@@ -35,7 +36,7 @@ def post(request):
     voiceSpeed = insert_data.get("voiceSpeed")
     voiceSpeedScore = insert_data.get("voiceSpeedScore")
     try:
-        result = video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore)
+        result = video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullness_type)
     except Exception as e:
         db_update = ImQzFile.objects.get(file_key=fileKey)
         db_update.qz_type = 'F'

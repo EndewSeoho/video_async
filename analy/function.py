@@ -377,8 +377,8 @@ def soundcheck(self):
     sound = AudioFileClip(self)  # self = .mp4
 
     shortsound = sound.subclip("00:00:01", "00:00:10")  # audio from 1 to 10 seconds
-    # fileroute = 'C:/Users/withmind/Desktop/'
-    fileroute = '/home/ubuntu/project/'
+    fileroute = 'C:/Users/withmind/Desktop/'
+    # fileroute = '/home/ubuntu/project/'
     filename = 'sound.wav'
     shortsound.write_audiofile(fileroute + filename, 44100, 2, 2000, "pcm_s32le")
 
