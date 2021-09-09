@@ -11,7 +11,7 @@ logger = get_task_logger(__name__)
 
 
 def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore,
-          documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullness_type):
+          documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType):
     komoran = Komoran()
     stt = str(stt)
     input_pos = komoran.pos(stt)
@@ -24,7 +24,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
     job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
-
+    zqCode = zqCode - 1
     code_noun = job_noun_file.loc[zqCode]
     code_noun = code_noun.values.tolist()
     code_noun_set = set(code_noun)
@@ -41,7 +41,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
 
     if len(input_data_set) != 0 :
-        if watchfullness_type == 1 :
+        if watchfullnessType == 1 :
             if qzNum == 1:
                 Similarity = 0
             else:
@@ -384,7 +384,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                        document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
                        voice_db_score=voiceDbScore,
                        voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed,
-                       voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts, watchfullness_type=watchfullness_type)
+                       voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts, watchfullness_type=watchfullnessType)
     # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
