@@ -5,7 +5,6 @@ from .tasks import video
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from django.http import JsonResponse
-from django.shortcuts import render
 
 @api_view(['GET'])
 def helloAPI(request):
@@ -37,6 +36,15 @@ def post(request):
     voiceSpeedScore = insert_data.get("voiceSpeedScore")
     try:
         result = video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullness_type)
+        if result == 0:
+            db_update = ImQzFile.objects.get(file_key=fileKey)
+            db_update.qz_type = 'Y'
+            db_update.save()
+        else:
+            db_update = ImQzFile.objects.get(file_key=fileKey)
+            db_update.qz_type = 'F'
+            db_update.save()
+
     except Exception as e:
         db_update = ImQzFile.objects.get(file_key=fileKey)
         db_update.qz_type = 'F'
@@ -45,14 +53,14 @@ def post(request):
 
         return JsonResponse(response_dict)
 
-    if result == 0:
-        db_update = ImQzFile.objects.get(file_key=fileKey)
-        db_update.qz_type = 'Y'
-        db_update.save()
-    else :
-        db_update = ImQzFile.objects.get(file_key=fileKey)
-        db_update.qz_type = 'F'
-        db_update.save()
+    # if result == 0:
+    #     db_update = ImQzFile.objects.get(file_key=fileKey)
+    #     db_update.qz_type = 'Y'
+    #     db_update.save()
+    # else :
+    #     db_update = ImQzFile.objects.get(file_key=fileKey)
+    #     db_update.qz_type = 'F'
+    #     db_update.save()
     print(result)
     response_dict = {"msessage": "OK", "status": "200"}
 
