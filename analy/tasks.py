@@ -115,7 +115,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                 if len(standard_list_Face) > 0:
                     standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
                 # frame_num += 1
-                print('000000000000000000', frame_num)
+                # print('000000000000000000', frame_num)
 
             if (frame_num % 5 == 0):
 
@@ -141,7 +141,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     # sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
                     # sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
                     EmotionResult = list_Face[0].fEmotionScore
-                    print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
+                    # print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
 
                     Emotion_list.append(EmotionResult)
                     #시선분석
