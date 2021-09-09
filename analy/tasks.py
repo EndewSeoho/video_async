@@ -71,7 +71,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     FPS = vc.get(cv2.CAP_PROP_FPS)
     video_width = vc.get(cv2.CAP_PROP_FRAME_WIDTH)
     video_height = vc.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    sound_confirm = soundcheck(fileUrl)
+    # sound_confirm = soundcheck(fileUrl)
+    sound_confirm = 1
 
     # 데이터 담을 리스트
     Face_count_list = []
@@ -142,7 +143,9 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     Emotion_list.append(EmotionResult)
                     #시선분석
                     gaze = Gaze_Regression(list_Face, 0)
-                    Gaze_list.append(pose_detector.gaze_Detector(gaze, img))
+                    gaze_value = pose_detector.gaze_Detector(gaze, img)
+                    if gaze_value[0] <= video_width and gaze_value <= video_height:
+                        Gaze_list.append()
                     pose_detector.findPose(img)
 
                     lmList_pose = pose_detector.findPosition(img)
