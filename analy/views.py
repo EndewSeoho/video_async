@@ -22,7 +22,7 @@ def post(request):
     fileKey = insert_data.get("fileKey")
     fileUrl = insert_data.get("fileUrl")
     zqCode = insert_data.get("zqCode")
-    watchfullness_type = insert_data.get("watchfullness_type")
+    watchfullness_type = insert_data.get("watchfullnessType")
     # zqCode = str(zqCode)
     stt = insert_data.get("stt")
     qzTts = insert_data.get("qzTts")
