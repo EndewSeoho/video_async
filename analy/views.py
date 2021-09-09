@@ -46,9 +46,9 @@ def post(request):
             db_update.save()
 
     except Exception as e:
-        db_update = ImQzFile.objects.get(file_key=fileKey)
-        db_update.qz_type = 'F'
-        db_update.save()
+        # db_update = ImQzFile.objects.get(file_key=fileKey)
+        # db_update.qz_type = 'F'
+        # db_update.save()
         response_dict = {"msessage": "Fail", "status": "200"}
 
         return JsonResponse(response_dict)
