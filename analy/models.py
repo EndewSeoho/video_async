@@ -54,7 +54,7 @@ class ImQzAnalysis(models.Model):
     qz_tts = models.CharField(db_column='QZ_TTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     watchfullness = models.IntegerField(db_column='WATCHFULLNESS', blank=True, null=True)  # Field name made lowercase.
     watchfullness_type = models.IntegerField(db_column='WATCHFULLNESS_TYPE')
-    regdate = models.DateTimeField(db_column='REGDATE', blank=True, null=True, default=timezone.localtime())  # Field name made lowercase.
+    regdate = models.DateTimeField(db_column='REGDATE', blank=True, null=True, default=timezone.now())  # Field name made lowercase.
 
     class Meta:
         managed = False
