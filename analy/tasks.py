@@ -363,12 +363,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                            "high_spot": {"x": Right_shoulder_high[0], "y": Right_shoulder_high[1]}}
     center_shoulder_dict = {"left_spot": {"x": Center_shoulder_extreme_left[0], "y": Center_shoulder_extreme_left[1]},
                             "right_spot": {"x": Center_shoulder_extreme_right[0], "y": Center_shoulder_extreme_right[1]}}
-    print("왼손>>>", Left_Hand_point_result)
-    print("오른손>>>", Right_Hand_point_result)
+    # print("왼손>>>", Left_Hand_point_result)
+    # print("오른손>>>", Right_Hand_point_result)
     left_hand_dict = {"point": Left_Hand_point_result}
     right_hand_dict = {"point": Right_Hand_point_result}
-    print("왼손>>>", left_hand_dict)
-    print("오른손>>>", right_hand_dict)
+    # print("왼손>>>", left_hand_dict)
+    # print("오른손>>>", right_hand_dict)
 
     res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
                        face_check=Face_analy_result,
