@@ -45,7 +45,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
             if qzNum == 1:
                 Similarity = 0
             else:
-                Similarity = round(len(intersection_noun) * 40 / len(input_data_set), 1)
+                Similarity = round((len(intersection_noun) * 40) / len(input_data_set), 1)
         else:
             Similarity = 0
     else :
