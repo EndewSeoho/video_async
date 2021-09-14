@@ -160,7 +160,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 left_hand = [lmList_pose[16][1], lmList_pose[16][2]]
                                 left_hand_point_list.append(left_hand)
                             else:
-                                if len(left_hand_point_list) > 5:
+                                if len(left_hand_point_list) > 7:
                                     Left_hand_count += 1
                                     Left_Hand_point_result.extend(left_hand_point_list)
                                 left_hand_point_list = []
@@ -170,7 +170,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 right_hand = [lmList_pose[15][1], lmList_pose[15][2]]
                                 right_hand_point_list.append(right_hand)
                             else:
-                                if len(right_hand_point_list) > 5:
+                                if len(right_hand_point_list) > 7:
                                     Right_hand_count += 1
                                     Right_Hand_point_result.extend(right_hand_point_list)
                                 right_hand_point_list = []

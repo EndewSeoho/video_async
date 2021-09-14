@@ -3,8 +3,8 @@ from torchvision import transforms
 from .preprocessing import faceAlignment
 from PIL import Image
 from .apps import *
-from moviepy.editor import *
-import librosa
+# from moviepy.editor import *
+# import librosa
 import numpy as np
 import mediapipe as mp
 import pandas as pd
@@ -379,34 +379,34 @@ class pose_Detector():
         return lmList
 
 
-def soundcheck(self):
-
-    sound = AudioFileClip(self)  # self = .mp4
-
-    shortsound = sound.subclip("00:00:01", "00:00:10")  # audio from 1 to 10 seconds
-    # fileroute = 'C:/Users/withmind/Desktop/'
-    fileroute = '/home/ubuntu/project/'
-    filename = self + '.wav'
-    shortsound.write_audiofile(fileroute + filename, 44100, 2, 2000, "pcm_s32le")
-
-    y, sr = librosa.load(fileroute + filename)
-    sound_result = 0
-    for i in y:
-        if y[-0] == 0.00:
-            print('음성확인 > ', False)
-            sound_result = 1
-            break
-        else:
-            if i == 0.00:
-                continue
-            else:
-                print('음성확인 > ', True)
-                sound_result = 0
-                break
-
-    os.remove(fileroute + filename)
-
-    return sound_result
+# def soundcheck(self):
+#
+#     sound = AudioFileClip(self)  # self = .mp4
+#
+#     shortsound = sound.subclip("00:00:01", "00:00:10")  # audio from 1 to 10 seconds
+#     # fileroute = 'C:/Users/withmind/Desktop/'
+#     fileroute = '/home/ubuntu/project/'
+#     filename = self + '.wav'
+#     shortsound.write_audiofile(fileroute + filename, 44100, 2, 2000, "pcm_s32le")
+#
+#     y, sr = librosa.load(fileroute + filename)
+#     sound_result = 0
+#     for i in y:
+#         if y[-0] == 0.00:
+#             print('음성확인 > ', False)
+#             sound_result = 1
+#             break
+#         else:
+#             if i == 0.00:
+#                 continue
+#             else:
+#                 print('음성확인 > ', True)
+#                 sound_result = 0
+#                 break
+#
+#     os.remove(fileroute + filename)
+#
+#     return sound_result
 
 class shoulder_movement:
     def shoulder_vertically(shoulder, Landmark_list):
