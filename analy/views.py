@@ -35,15 +35,11 @@ def post(request):
     voiceSpeed = insert_data.get("voiceSpeed")
     voiceSpeedScore = insert_data.get("voiceSpeedScore")
     try:
-        result = video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType)
-        if result == 0:
-            db_update = ImQzFile.objects.get(file_key=fileKey)
-            db_update.qz_type = 'Y'
-            db_update.save()
-        else:
-            db_update = ImQzFile.objects.get(file_key=fileKey)
-            db_update.qz_type = 'F'
-            db_update.save()
+        video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType)
+
+        db_update = ImQzFile.objects.get(file_key=fileKey)
+        db_update.qz_type = 'Y'
+        db_update.save()
 
     except Exception as e:
         db_update = ImQzFile.objects.get(file_key=fileKey)
@@ -61,7 +57,7 @@ def post(request):
     #     db_update = ImQzFile.objects.get(file_key=fileKey)
     #     db_update.qz_type = 'F'
     #     db_update.save()
-    print(result)
+    # print(result)
     response_dict = {"msessage": "OK", "status": "200"}
 
 
