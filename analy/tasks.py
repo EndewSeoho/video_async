@@ -347,7 +347,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         Gaze_std_value = Average.Gaze_Avg(Gaze_list)
 
     else:
-        Gaze_std_value = 0
+        Gaze_std_value = (0, 0)
     Roll_mean_value
     Shoulder_slope_mean_value
     shouleder_vertically_max_length_value = Average.vertically_Avg(Left_shoulder_high,
