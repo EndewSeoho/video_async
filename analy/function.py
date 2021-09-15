@@ -172,51 +172,51 @@ def Landmark_Detection(Landmark_Net, cvImg, list_Face, nIndex):
     offsetX = xLeftBottom_in
     offsetY = yLeftBottom_in
 
-    if len(INPUT) != 0:
+    # if len(INPUT) != 0:
 
-        # preprocessing
-        w = xRightTop_in - xLeftBottom_in
-        INPUT = cv2.resize(INPUT, (256, 256))
-        INPUT = INPUT / 255
-        ratio = w / 256
-        INPUT = np.transpose(INPUT, axes=[2, 0, 1])
-        INPUT = np.array(INPUT, dtype=np.float32)
-        INPUT = torch.from_numpy(INPUT)
-        INPUT = torch.unsqueeze(INPUT, 0)
-        INPUT = INPUT.to(device)
-        OUTPUT = Landmark_Net(INPUT)
-        OUTPUT = torch.squeeze(OUTPUT)
-        output_np = OUTPUT.cpu().detach().numpy()
-        output_np = output_np * 1.1 * 256
-        output_np = output_np * ratio
+    # preprocessing
+    w = xRightTop_in - xLeftBottom_in
+    INPUT = cv2.resize(INPUT, (256, 256))
+    INPUT = INPUT / 255
+    ratio = w / 256
+    INPUT = np.transpose(INPUT, axes=[2, 0, 1])
+    INPUT = np.array(INPUT, dtype=np.float32)
+    INPUT = torch.from_numpy(INPUT)
+    INPUT = torch.unsqueeze(INPUT, 0)
+    INPUT = INPUT.to(device)
+    OUTPUT = Landmark_Net(INPUT)
+    OUTPUT = torch.squeeze(OUTPUT)
+    output_np = OUTPUT.cpu().detach().numpy()
+    output_np = output_np * 1.1 * 256
+    output_np = output_np * ratio
 
-        # 좌표 보정
-        for ii in range(68):
-            output_np[ii * 2 + 0] = output_np[ii * 2 + 0] + offsetX
-            output_np[ii * 2 + 1] = output_np[ii * 2 + 1] + offsetY
+    # 좌표 보정
+    for ii in range(68):
+        output_np[ii * 2 + 0] = output_np[ii * 2 + 0] + offsetX
+        output_np[ii * 2 + 1] = output_np[ii * 2 + 1] + offsetY
 
-        leX = leY = reX = reY = lmX = lmY = rmX = rmY = nX = nY = 0
-        for ii in range(36, 42, 1):
-            leX = leX + output_np[ii * 2 + 0]
-            leY = leY + output_np[ii * 2 + 1]
+    leX = leY = reX = reY = lmX = lmY = rmX = rmY = nX = nY = 0
+    for ii in range(36, 42, 1):
+        leX = leX + output_np[ii * 2 + 0]
+        leY = leY + output_np[ii * 2 + 1]
 
-        for ii in range(42, 48, 1):
-            reX = reX + output_np[ii * 2 + 0]
-            reY = reY + output_np[ii * 2 + 1]
+    for ii in range(42, 48, 1):
+        reX = reX + output_np[ii * 2 + 0]
+        reY = reY + output_np[ii * 2 + 1]
 
-        # 눈, 입 양 끝점 저장
-        list_Face[nIndex].ptLE = [int(leX / 6), int(leY / 6)]
-        list_Face[nIndex].ptRE = [int(reX / 6), int(reY / 6)]
-        list_Face[nIndex].ptLM = [int(output_np[48 * 2 + 0]), int(output_np[48 * 2 + 1])]
-        list_Face[nIndex].ptRM = [int(output_np[54 * 2 + 0]), int(output_np[54 * 2 + 1])]
-        list_Face[nIndex].ptN = [int(output_np[30 * 2 + 0]), int(output_np[30 * 2 + 1])]
+    # 눈, 입 양 끝점 저장
+    list_Face[nIndex].ptLE = [int(leX / 6), int(leY / 6)]
+    list_Face[nIndex].ptRE = [int(reX / 6), int(reY / 6)]
+    list_Face[nIndex].ptLM = [int(output_np[48 * 2 + 0]), int(output_np[48 * 2 + 1])]
+    list_Face[nIndex].ptRM = [int(output_np[54 * 2 + 0]), int(output_np[54 * 2 + 1])]
+    list_Face[nIndex].ptN = [int(output_np[30 * 2 + 0]), int(output_np[30 * 2 + 1])]
 
-        torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
 
-        return output_np
+    return output_np
 
-    else:
-        return []
+    # else:
+    #     return []
 
 
 transformations_emotionnet = transforms.Compose(
