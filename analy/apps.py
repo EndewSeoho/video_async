@@ -40,7 +40,7 @@ class ImConfig(AppConfig):
 
     Landmark_Net = LandmarkNet(3, 3)
     # Landmark_Net = torch.nn.DataParallel(Landmark_Net).to(device)
-    # Landmark_Net = Landmark_Net.to(device)
+    Landmark_Net = Landmark_Net.to(device)
     # Landmark_Net.load_state_dict(torch.load("C:/Users/withmind/Desktop/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)['state_dict'])
     Landmark_Net.load_state_dict(
         torch.load("/home/ubuntu/project/models/ETRI_LANDMARK_68pt.pth.tar", map_location=device)[
