@@ -133,14 +133,14 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                         #랜드마크 분석
                         # try:
-                        print("asd>>>>", list_Face[0].rt[0], list_Face[0].rt[1], list_Face[0].rt[2], list_Face[0].rt[3])
+                        # print("asd>>>>", list_Face[0].rt[0], list_Face[0].rt[1], list_Face[0].rt[2], list_Face[0].rt[3])
                         Landmark_list = Landmark_Detection(Landmark_Net, img, list_Face, 0)
                         if len(Landmark_list) > 0:
 
                             #머리 각도 분석
                             Headpose = HeadPose_Estimation(Headpose_Net, img, list_Face, 0)
                             roll = Headpose[2].item()
-                            print("roll>>>>>>>>>>>", roll)
+                            # print("roll>>>>>>>>>>>", roll)
                             Roll_list.append(roll)
                             #감정분석
                             Emotion_Classification(Emotion_Net, img, list_Face, 0)
@@ -148,7 +148,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                             # sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
                             EmotionResult = list_Face[0].fEmotionScore
                             # print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
-                            print("EMOTION>>>>>>>>", EmotionResult)
+                            # print("EMOTION>>>>>>>>", EmotionResult)
                             Emotion_list.append(EmotionResult)
                             #시선분석
                             gaze = Gaze_Regression(list_Face, 0)
@@ -156,7 +156,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                             # if gaze_value[0] <= video_width and gaze_value <= video_height:
                             Gaze_list.append(gaze_value)
                             pose_detector.findPose(img)
-                            print("GAZE>>>>>>>>>>>>", gaze_value)
+                            # print("GAZE>>>>>>>>>>>>", gaze_value)
                             lmList_pose = pose_detector.findPosition(img)
                             if len(lmList_pose) != 0:
                                 # 왼손
