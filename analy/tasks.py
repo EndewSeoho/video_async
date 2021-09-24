@@ -13,6 +13,7 @@ logger = get_task_logger(__name__)
 def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore,
           documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType):
     komoran = Komoran()
+
     stt = str(stt)
     input_pos = komoran.pos(stt)
 
@@ -94,7 +95,10 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     center_shoulder_horizontally_left_move_count = 0
     center_shoulder_horizontally_right_move_count = 0
     Shoulder_slope_list = []
-
+    Left_shoulder_y_point_list = []
+    Left_shoulder_x_point_list = []
+    Right_shoulder_y_point_list = []
+    Right_shoulder_x_point_list = []
 
 
     bReady = True
@@ -117,6 +121,10 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                     standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
                 # frame_num += 1
                 # print('000000000000000000', frame_num)
+
+                pose_detector.findPose(standard_img)
+                # print("GAZE>>>>>>>>>>>>", gaze_value)
+                standard_lmList_pose = pose_detector.findPosition(standard_img)
 
             if (frame_num >= 31 and frame_num % 5 == 0):
 
@@ -182,26 +190,38 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
                                 # 어깨 위치
                                 left_shoulder_point = (int(lmList_pose[12][1]), int(lmList_pose[12][2]))
+                                left_shoulder_x_point = int(lmList_pose[12][1])
+                                left_shoulder_y_point = int(lmList_pose[12][2])
+                                Left_shoulder_x_point_list.append(left_shoulder_x_point)
+                                Left_shoulder_y_point_list.append(left_shoulder_y_point)
                                 right_shoulder_point = (int(lmList_pose[11][1]), int(lmList_pose[11][2]))
+                                right_shoulder_x_point = int(lmList_pose[11][1])
+                                right_shoulder_y_point = int(lmList_pose[11][2])
+                                Right_shoulder_x_point_list.append(right_shoulder_x_point)
+                                Right_shoulder_y_point_list.append(right_shoulder_y_point)
                                 center_shoulder_x = int((lmList_pose[11][1] + lmList_pose[12][1]) / 2)
                                 center_shoulder_y = int((lmList_pose[11][2] + lmList_pose[12][2]) / 2)
                                 center_shoulder_point = (center_shoulder_x, center_shoulder_y)
 
-                                Left_shoulder_point_list.append(left_shoulder_point)
-                                Right_shoulder_point_list.append(right_shoulder_point)
-                                Center_shoulder_point_list.append(center_shoulder_point)
+                                if left_shoulder_point[0] < video_width and left_shoulder_point[1] < video_height:
+                                    Left_shoulder_point_list.append(left_shoulder_point)
+                                if right_shoulder_point[0] < video_width and right_shoulder_point[1] < video_height:
+                                    Right_shoulder_point_list.append(right_shoulder_point)
+                                if center_shoulder_point[0] < video_width and center_shoulder_point[1] < video_height:
+                                    Center_shoulder_point_list.append(center_shoulder_point)
+
 
                                 # 어깨 움직임
                                 if len(Landmark_list) != 0:
-                                    left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                        left_shoulder_point, standard_Landmark_list)
-                                    right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                        right_shoulder_point, standard_Landmark_list)
+                                    # left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                                    #     left_shoulder_point, standard_Landmark_list)
+                                    # right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                                    #     right_shoulder_point, standard_Landmark_list)
 
 
-                                    center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
-                                    center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
-                                    center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
+                                    # center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
+                                    # center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
+                                    # center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
 
                                     # 어깨 기울기
                                     shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
@@ -323,18 +343,96 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         Left_shoulder_low = left_shoulder_cal[0]
         Left_shoulder_high = left_shoulder_cal[1]
 
+        horizontal_list = []
+        horizontal_t = 0
+        horizontal_prev = standard_lmList_pose[12][1]
+        # print(Right_shoulder_x_point_list)
+        for i  in Left_shoulder_x_point_list:
+            if i < horizontal_prev:
+                horizontal_list.append(1)
+                prev = i
+            else:
+                if len(horizontal_list) > 3:
+                    horizontal_t += 1
+                    horizontal_list = []
+                else :
+                    horizontal_list = []
+                horizontal_prev = i
+        center_shoulder_horizontally_left_move_count = horizontal_t
+
+        vertical_list = []
+        vertical_t = 0
+        vertical_prev = standard_lmList_pose[12][2]
+        # print(standard_lmList_pose[12][2])
+        # print(Left_shoulder_y_point_list)
+        for i in Left_shoulder_y_point_list:
+            if i > vertical_prev:
+                vertical_list.append(1)
+                prev = i
+            else :
+                if len(vertical_list) > 3 :
+                    vertical_t += 1
+                    vertical_list = []
+                else :
+                    vertical_list = []
+
+                vertical_prev = i
+
+        left_shoulder_vertically_move_count = vertical_t
+
     else :
         Left_shoulder_low = (0, 0)
         Left_shoulder_high = (0, 0)
+        center_shoulder_horizontally_left_move_count = 0
+        left_shoulder_vertically_move_count = 0
 
     if len(Right_shoulder_point_list) != 0:
         right_shoulder_cal = shoulder_movement.shoulder_vertical_low_high(Right_shoulder_point_list)
         Right_shoulder_low = right_shoulder_cal[0]
         Right_shoulder_high = right_shoulder_cal[1]
 
+        horizontal_list = []
+        horizontal_t = 0
+        horizontal_prev = standard_lmList_pose[11][1]
+        # print(Right_shoulder_x_point_list)
+        for i in Right_shoulder_x_point_list:
+            if i > horizontal_prev:
+                horizontal_list.append(1)
+                prev = i
+            else:
+                if len(horizontal_list) > 3:
+                    horizontal_t += 1
+                    horizontal_list = []
+                else:
+                    horizontal_list = []
+                horizontal_prev = i
+        center_shoulder_horizontally_right_move_count = horizontal_t
+
+        vertical_list = []
+        vertical_t = 0
+        vertical_prev = standard_lmList_pose[11][2]
+        # print(standard_lmList_pose[12][2])
+        # print(Left_shoulder_y_point_list)
+        for i in Right_shoulder_y_point_list:
+            if i > vertical_prev:
+                vertical_list.append(1)
+                prev = i
+            else:
+                if len(vertical_list) > 3:
+                    vertical_t += 1
+                    vertical_list = []
+                else:
+                    vertical_list = []
+
+                vertical_prev = i
+
+        right_shoulder_vertically_move_count = vertical_t
+
     else:
         Right_shoulder_low = (0, 0)
         Right_shoulder_high = (0, 0)
+        center_shoulder_horizontally_right_move_count = 0
+        right_shoulder_vertically_move_count = 0
 
     if len(Center_shoulder_point_list) != 0:
         center_shoulder_cal = shoulder_movement.shoulder_horizon_left_right(Center_shoulder_point_list)
@@ -389,7 +487,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                        gaze=json.dumps(gaze_dict), face_angle=round(Roll_mean_value, 5),
                        shoulder_angle=round(Shoulder_slope_mean_value, 5), left_shoulder=json.dumps(left_shoulder_dict),
                        left_shoulder_move_count=left_shoulder_vertically_move_count,
-                       right_shoulder=json.dumps(right_shoulder_dict), right_shoulder_move_count=right_shoulder_vertically_move_count,
+                       right_shoulder=json.dumps(right_shoulder_dict),
+                       right_shoulder_move_count=right_shoulder_vertically_move_count,
                        center_shoulder=json.dumps(center_shoulder_dict),
                        center_shoulder_left_move_count=center_shoulder_horizontally_left_move_count,
                        center_shoulder_right_move_count=center_shoulder_horizontally_right_move_count,
