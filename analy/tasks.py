@@ -20,7 +20,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     for i in range(0, len(input_pos)):
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
-    print("stt>>>>>>>", input_noun_list)
+    # print("stt>>>>>>>", input_noun_list)
     # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
     job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
