@@ -203,11 +203,11 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 center_shoulder_y = int((lmList_pose[11][2] + lmList_pose[12][2]) / 2)
                                 center_shoulder_point = (center_shoulder_x, center_shoulder_y)
 
-                                if left_shoulder_point[0] < video_width and left_shoulder_point[1] < video_height:
+                                if 0 < left_shoulder_point[0] < video_width and 0 < left_shoulder_point[1] < video_height:
                                     Left_shoulder_point_list.append(left_shoulder_point)
-                                if right_shoulder_point[0] < video_width and right_shoulder_point[1] < video_height:
+                                if 0 < right_shoulder_point[0] < video_width and 0 < right_shoulder_point[1] < video_height:
                                     Right_shoulder_point_list.append(right_shoulder_point)
-                                if center_shoulder_point[0] < video_width and center_shoulder_point[1] < video_height:
+                                if 0 < center_shoulder_point[0] < video_width and 0 < center_shoulder_point[1] < video_height:
                                     Center_shoulder_point_list.append(center_shoulder_point)
 
 
