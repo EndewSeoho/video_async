@@ -165,7 +165,7 @@ def Landmark_Detection(Landmark_Net, cvImg, list_Face, nIndex):
     yRightTop_in = min(yRightTop_in + n15, h - 1)
 
     INPUT = cvImg[(int(yLeftBottom_in)):(int(yRightTop_in)), (int(xLeftBottom_in)): (int(xRightTop_in))]
-    print("INPUI>>>>>>>>>>>>>>>", INPUT)
+    # print("INPUI>>>>>>>>>>>>>>>", INPUT)
     # 인식 좌표 정보에 얼굴 위치 보정하기 위한 값
     # offsetX = list_ETRIFace[nIndex].rt[0]
     # offsetY = list_ETRIFace[nIndex].rt[1]
@@ -417,7 +417,7 @@ class shoulder_movement:
         if shoulder[1] >= landmark_no7_y:
             shoulder_move_list.append(1)
         else:
-            if len(shoulder_move_list) > 3:
+            if len(shoulder_move_list) > 1:
                 shoulder_move_count = 1
             shoulder_move_list = []
 
@@ -425,7 +425,9 @@ class shoulder_movement:
 
     def shoulder_horizontally(shoulder, Landmark_list):
         landmark_no5_x = Landmark_list[8]
+        # print(landmark_no5_x)
         landmark_no13_x = Landmark_list[24]
+        # print(landmark_no13_x)
         shoulder_left_move_list = []
         shoulder_left_move_count = 0
         shoulder_right_move_list = []
@@ -438,9 +440,9 @@ class shoulder_movement:
             shoulder_right_move_list.append(1)
 
         else:
-            if len(shoulder_left_move_list) > 3:
+            if len(shoulder_left_move_list) > 1:
                 shoulder_left_move_count = 1
-            if len(shoulder_right_move_list) > 3:
+            if len(shoulder_right_move_list) > 1:
                 shoulder_right_move_count = 1
 
         return (shoulder_left_move_count, shoulder_right_move_count)

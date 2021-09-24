@@ -20,14 +20,15 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     for i in range(0, len(input_pos)):
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
-
+    print("stt>>>>>>>", input_noun_list)
     # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
     job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
     zqCode = zqCode - 1
     code_noun = job_noun_file.loc[zqCode]
     code_noun = code_noun.values.tolist()
-    code_noun_set = set(code_noun)
+    code_noun_list = [x for x in code_noun if pd.isnull(x) == False]
+    code_noun_set = set(code_noun_list)
     input_data_set = set(input_noun_list)
 
     intersection_noun = input_data_set.intersection(code_noun_set)
@@ -37,7 +38,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
             if i in i == ii:
                 t += 1
         noun_result = ImQzAnalysisJobword(file_key=fileKey, qz_group=qzGroup, word=str(i), count=t)
-        noun_result.save
+        noun_result.save()
 
 
     if len(input_data_set) != 0 :
@@ -106,18 +107,18 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         ret, frame = vc.read()
 
         if ret:
-            # if (frame_num == 1):
-            #     standard_frame = cv2.flip(frame, 1)
-            #     standard_img = standard_frame
-            #
-            #     standard_list_Face = []
-            #     standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
-            #     if len(standard_list_Face) > 0:
-            #         standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
-            #     # frame_num += 1
-            #     # print('000000000000000000', frame_num)
+            if (frame_num == 30):
+                standard_frame = cv2.flip(frame, 1)
+                standard_img = standard_frame
 
-            if (frame_num % 5 == 0):
+                standard_list_Face = []
+                standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
+                if len(standard_list_Face) > 0:
+                    standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
+                # frame_num += 1
+                # print('000000000000000000', frame_num)
+
+            if (frame_num >= 31 and frame_num % 5 == 0):
 
                 # try:
                     frame = cv2.flip(frame, 1)
@@ -193,12 +194,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 # 어깨 움직임
                                 if len(Landmark_list) != 0:
                                     left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                        left_shoulder_point, Landmark_list)
+                                        left_shoulder_point, standard_Landmark_list)
                                     right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                        right_shoulder_point, Landmark_list)
+                                        right_shoulder_point, standard_Landmark_list)
 
 
-                                    center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, Landmark_list)
+                                    center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
                                     center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
                                     center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
 
@@ -234,8 +235,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
 #     Face_count_exception = len(Face_count_list) - Face_count_list.count(1)
     Face_count_exception = Face_count_list.count(0)
-#     print(Face_count_list)
-    if Face_count_exception * 6 >= (FPS * 7) :
+    # print("얼굴>>>>>>>>>>", Face_count_list)
+    if Face_count_exception * 5 >= (FPS * 7) :
         Face_analy_result = 1
     else:
         Face_analy_result = 0
