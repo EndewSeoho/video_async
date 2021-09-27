@@ -256,7 +256,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 #     Face_count_exception = len(Face_count_list) - Face_count_list.count(1)
     Face_count_exception = Face_count_list.count(0)
     # print("얼굴>>>>>>>>>>", Face_count_list)
-    if Face_count_exception * 5 >= (FPS * 7) :
+    if Face_count_exception * 2 >= (FPS * 7) :
         Face_analy_result = 1
     else:
         Face_analy_result = 0
