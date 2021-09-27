@@ -22,8 +22,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
     # print("stt>>>>>>>", input_noun_list)
-    # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
-    job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
+    # job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
     zqCode = zqCode - 1
     code_noun = job_noun_file.loc[zqCode]
@@ -262,13 +262,17 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 #         Face_analy_result = 0
     first_count = 0
     fin_count = 0
+    print("Face_count_list>>>>>>>>>>", Face_count_list)
     for i in Face_count_list:
         if Face_count_list[i] == 0:
             first_count += 1
             if first_count == 6:
                 fin_count += 1
+                first_count = 0
         else:
             first_count = 0
+
+    print("fin_count>>>>>>", fin_count)
     if fin_count > 7:
         Face_analy_result = 1
     else:
