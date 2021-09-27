@@ -254,9 +254,22 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
             break
 
 #     Face_count_exception = len(Face_count_list) - Face_count_list.count(1)
-    Face_count_exception = Face_count_list.count(0)
-    # print("얼굴>>>>>>>>>>", Face_count_list)
-    if Face_count_exception * 2 >= (FPS * 7) :
+#     Face_count_exception = Face_count_list.count(0)
+#     # print("얼굴>>>>>>>>>>", Face_count_list)
+#     if Face_count_exception * 2 >= (FPS * 7) :
+#         Face_analy_result = 1
+#     else:
+#         Face_analy_result = 0
+    first_count = 0
+    fin_count = 0
+    for i in Face_count_list:
+        if Face_count_list[i] == 0:
+            first_count += 1
+            if first_count == 6:
+                fin_count += 1
+        else:
+            first_count = 0
+    if fin_count > 7:
         Face_analy_result = 1
     else:
         Face_analy_result = 0
