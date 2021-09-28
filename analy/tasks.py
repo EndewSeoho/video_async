@@ -464,12 +464,15 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     Right_Hand_time = float(len(Right_Hand_point_result) / 6)
 
     # 점수화_표준편차
-    if len(Gaze_list) > 0:
+    if len(Gaze_list) > 100:
 
         Gaze_std_value = Average.Gaze_Avg(Gaze_list)
 
+
     else:
         Gaze_std_value = (0, 0)
+        gazeXScore = 0
+        gazeYScore = 0
     Roll_mean_value
     Shoulder_slope_mean_value
     shouleder_vertically_max_length_value = Average.vertically_Avg(Left_shoulder_high,
@@ -495,6 +498,38 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # print("왼손>>>", left_hand_dict)
     # print("오른손>>>", right_hand_dict)
 
+
+
+
+
+    # 점수 예외 처리
+    if Face_analy_result == 1:
+        gazeXScore = 0
+        gazeYScore = 0
+        shoulderVerticalScore = 0
+        shoulderHorizonScore = 0
+        faceAngleScore = 0
+        gestureScore = 0
+        watchfullness = 0
+        documentSentimentScore = 0
+        voiceDbScore = 0
+        voiceToneScore = 0
+        voiceSpeedScore = 0
+    else:
+        gazeXScore = scoring.GAZE_X_scoring(Gaze_std_value[0])
+        gazeYScore = scoring.GAZE_Y_scoring(Gaze_std_value[1])
+        shoulderVerticalScore = scoring.SHOULDER_VERTICAL_scoring(shouleder_vertically_max_length_value)
+        shoulderHorizonScore = scoring.SHOULDER_HORIZON_scoring(shoulder_horizontally_max_length_value)
+        faceAngleScore = scoring.FACE_ANGLE_scoring(Roll_mean_value)
+        gestureScore = scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value)
+        watchfullness = watchfullness
+        documentSentimentScore = documentSentimentScore
+        voiceDbScore = voiceDbScore
+        voiceToneScore = voiceToneScore
+        voiceSpeedScore = voiceSpeedScore
+
+
+
     res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
                        face_check=Face_analy_result,
                        sound_check=sound_confirm, emotion_surprise=round(Emotion_surprise_mean, 5),
@@ -513,12 +548,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                        left_hand_move_count=Left_hand_count,
                        right_hand=json.dumps(right_hand_dict), right_hand_time=Right_Hand_time,
                        right_hand_move_count=Right_hand_count,
-                       gaze_x_score=scoring.GAZE_X_scoring(Gaze_std_value[0]),
-                       gaze_y_score=scoring.GAZE_Y_scoring(Gaze_std_value[1]),
-                       shoulder_vertical_score=scoring.SHOULDER_VERTICAL_scoring(shouleder_vertically_max_length_value),
-                       shoulder_horizon_score=scoring.SHOULDER_HORIZON_scoring(shoulder_horizontally_max_length_value),
-                       face_angle_score=scoring.FACE_ANGLE_scoring(Roll_mean_value),
-                       gesture_score=scoring.SHOULDER_ANGLE_scoring(Shoulder_slope_mean_value),
+                       gaze_x_score=gazeXScore,
+                       gaze_y_score=gazeYScore,
+                       shoulder_vertical_score=shoulderVerticalScore,
+                       shoulder_horizon_score=shoulderHorizonScore,
+                       face_angle_score=faceAngleScore,
+                       gesture_score=gestureScore,
                        watchfullness=watchfullness, document_sentiment_score=documentSentimentScore,
                        document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
                        voice_db_score=voiceDbScore,
