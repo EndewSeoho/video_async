@@ -129,144 +129,144 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
             if (frame_num >= 31 and frame_num % 5 == 0):
 
                 # try:
-                    frame = cv2.flip(frame, 1)
-                    img = frame
-                    list_Face = []
-                    # cv2.imwrite('frame%d.png' % frame_num, frame)
-                    Face_Detection(FD_Net, img, list_Face)
-                    Face_count_list.append(len(list_Face))
-                    # print('111111111111111111111', frame_num)
+                frame = cv2.flip(frame, 1)
+                img = frame
+                list_Face = []
+                # cv2.imwrite('frame%d.png' % frame_num, frame)
+                Face_Detection(FD_Net, img, list_Face)
+                Face_count_list.append(len(list_Face))
+                # print('111111111111111111111', frame_num)
 
-                    # print("asdasada", len(list_Face))
-                    if len(list_Face) > 0:
+                # print("asdasada", len(list_Face))
+                if len(list_Face) > 0:
 
-                        #랜드마크 분석
-                        # try:
-                        # print("asd>>>>", list_Face[0].rt[0], list_Face[0].rt[1], list_Face[0].rt[2], list_Face[0].rt[3])
-                        Landmark_list = Landmark_Detection(Landmark_Net, img, list_Face, 0)
-                        if len(Landmark_list) > 0:
+                    #랜드마크 분석
+                    # try:
+                    # print("asd>>>>", list_Face[0].rt[0], list_Face[0].rt[1], list_Face[0].rt[2], list_Face[0].rt[3])
+                    Landmark_list = Landmark_Detection(Landmark_Net, img, list_Face, 0)
+                    if len(Landmark_list) > 0:
 
-                            #머리 각도 분석
-                            Headpose = HeadPose_Estimation(Headpose_Net, img, list_Face, 0)
-                            roll = Headpose[2].item()
-                            # print("roll>>>>>>>>>>>", roll)
-                            Roll_list.append(roll)
-                            #감정분석
-                            Emotion_Classification(Emotion_Net, img, list_Face, 0)
-                            # sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
-                            # sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
-                            EmotionResult = list_Face[0].fEmotionScore
-                            # print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
-                            # print("EMOTION>>>>>>>>", EmotionResult)
-                            Emotion_list.append(EmotionResult)
-                            #시선분석
-                            gaze = Gaze_Regression(list_Face, 0)
-                            gaze_value = pose_detector.gaze_Detector(gaze, img)
-                            # if gaze_value[0] <= video_width and gaze_value <= video_height:
-                            Gaze_list.append(gaze_value)
-                            pose_detector.findPose(img)
-                            # print("GAZE>>>>>>>>>>>>", gaze_value)
-                            lmList_pose = pose_detector.findPosition(img)
-                            if len(lmList_pose) != 0:
-                                # 왼손
-                                if lmList_pose[16][1] < video_width and lmList_pose[16][2] < video_height:
-                                    left_hand = [lmList_pose[16][1], lmList_pose[16][2]]
-                                    left_hand_point_list.append(left_hand)
-                                else:
-                                    if len(left_hand_point_list) > 7:
-                                        Left_hand_count += 1
-                                        Left_Hand_point_result.extend(left_hand_point_list)
-                                    left_hand_point_list = []
+                        #머리 각도 분석
+                        Headpose = HeadPose_Estimation(Headpose_Net, img, list_Face, 0)
+                        roll = Headpose[2].item()
+                        # print("roll>>>>>>>>>>>", roll)
+                        Roll_list.append(roll)
+                        #감정분석
+                        Emotion_Classification(Emotion_Net, img, list_Face, 0)
+                        # sEmotionLabel = ["surprise", "fear", "disgust", "happy", "sadness", "angry", "neutral"]
+                        # sEmotionResult = "Emotion : %s" % sEmotionLabel[list_Face[0].nEmotion]
+                        EmotionResult = list_Face[0].fEmotionScore
+                        # print("감정>>>>>>>>>>>>>>>", EmotionResult, frame_num)
+                        # print("EMOTION>>>>>>>>", EmotionResult)
+                        Emotion_list.append(EmotionResult)
+                        #시선분석
+                        gaze = Gaze_Regression(list_Face, 0)
+                        gaze_value = pose_detector.gaze_Detector(gaze, img)
+                        # if gaze_value[0] <= video_width and gaze_value <= video_height:
+                        Gaze_list.append(gaze_value)
+                        pose_detector.findPose(img)
+                        # print("GAZE>>>>>>>>>>>>", gaze_value)
+                        lmList_pose = pose_detector.findPosition(img)
+                        if len(lmList_pose) != 0:
+                            # 왼손
+                            if lmList_pose[16][1] < video_width and lmList_pose[16][2] < video_height:
+                                left_hand = [lmList_pose[16][1], lmList_pose[16][2]]
+                                left_hand_point_list.append(left_hand)
+                            else:
+                                if len(left_hand_point_list) > 7:
+                                    Left_hand_count += 1
+                                    Left_Hand_point_result.extend(left_hand_point_list)
+                                left_hand_point_list = []
 
-                                # 오른손
-                                if lmList_pose[15][1] < video_width and lmList_pose[15][2] < video_height:
-                                    right_hand = [lmList_pose[15][1], lmList_pose[15][2]]
-                                    right_hand_point_list.append(right_hand)
-                                else:
-                                    if len(right_hand_point_list) > 7:
-                                        Right_hand_count += 1
-                                        Right_Hand_point_result.extend(right_hand_point_list)
-                                    right_hand_point_list = []
+                            # 오른손
+                            if lmList_pose[15][1] < video_width and lmList_pose[15][2] < video_height:
+                                right_hand = [lmList_pose[15][1], lmList_pose[15][2]]
+                                right_hand_point_list.append(right_hand)
+                            else:
+                                if len(right_hand_point_list) > 7:
+                                    Right_hand_count += 1
+                                    Right_Hand_point_result.extend(right_hand_point_list)
+                                right_hand_point_list = []
 
-                                # 어깨 위치
-                                left_shoulder_point = (int(lmList_pose[12][1]), int(lmList_pose[12][2]))
-                                left_shoulder_x_point = int(lmList_pose[12][1])
-                                left_shoulder_y_point = int(lmList_pose[12][2])
-                                Left_shoulder_x_point_list.append(left_shoulder_x_point)
-                                Left_shoulder_y_point_list.append(left_shoulder_y_point)
-                                right_shoulder_point = (int(lmList_pose[11][1]), int(lmList_pose[11][2]))
-                                right_shoulder_x_point = int(lmList_pose[11][1])
-                                right_shoulder_y_point = int(lmList_pose[11][2])
-                                Right_shoulder_x_point_list.append(right_shoulder_x_point)
-                                Right_shoulder_y_point_list.append(right_shoulder_y_point)
-                                center_shoulder_x = int((lmList_pose[11][1] + lmList_pose[12][1]) / 2)
-                                center_shoulder_y = int((lmList_pose[11][2] + lmList_pose[12][2]) / 2)
-                                center_shoulder_point = (center_shoulder_x, center_shoulder_y)
+                            # 어깨 위치
+                            left_shoulder_point = (int(lmList_pose[12][1]), int(lmList_pose[12][2]))
+                            left_shoulder_x_point = int(lmList_pose[12][1])
+                            left_shoulder_y_point = int(lmList_pose[12][2])
+                            Left_shoulder_x_point_list.append(left_shoulder_x_point)
+                            Left_shoulder_y_point_list.append(left_shoulder_y_point)
+                            right_shoulder_point = (int(lmList_pose[11][1]), int(lmList_pose[11][2]))
+                            right_shoulder_x_point = int(lmList_pose[11][1])
+                            right_shoulder_y_point = int(lmList_pose[11][2])
+                            Right_shoulder_x_point_list.append(right_shoulder_x_point)
+                            Right_shoulder_y_point_list.append(right_shoulder_y_point)
+                            center_shoulder_x = int((lmList_pose[11][1] + lmList_pose[12][1]) / 2)
+                            center_shoulder_y = int((lmList_pose[11][2] + lmList_pose[12][2]) / 2)
+                            center_shoulder_point = (center_shoulder_x, center_shoulder_y)
 
-                                if 0 < left_shoulder_point[0] < video_width and 0 < left_shoulder_point[1] < video_height:
-                                    Left_shoulder_point_list.append(left_shoulder_point)
-                                if 0 < right_shoulder_point[0] < video_width and 0 < right_shoulder_point[1] < video_height:
-                                    Right_shoulder_point_list.append(right_shoulder_point)
-                                if 0 < center_shoulder_point[0] < video_width and 0 < center_shoulder_point[1] < video_height:
-                                    Center_shoulder_point_list.append(center_shoulder_point)
-
-
-                                # 어깨 움직임
-                                if len(Landmark_list) != 0:
-                                    # left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                    #     left_shoulder_point, standard_Landmark_list)
-                                    # right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                    #     right_shoulder_point, standard_Landmark_list)
+                            if 0 < left_shoulder_point[0] < video_width and 0 < left_shoulder_point[1] < video_height:
+                                Left_shoulder_point_list.append(left_shoulder_point)
+                            if 0 < right_shoulder_point[0] < video_width and 0 < right_shoulder_point[1] < video_height:
+                                Right_shoulder_point_list.append(right_shoulder_point)
+                            if 0 < center_shoulder_point[0] < video_width and 0 < center_shoulder_point[1] < video_height:
+                                Center_shoulder_point_list.append(center_shoulder_point)
 
 
-                                    # center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
-                                    # center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
-                                    # center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
+                            # 어깨 움직임
+                            if len(Landmark_list) != 0:
+                                # left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                                #     left_shoulder_point, standard_Landmark_list)
+                                # right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                                #     right_shoulder_point, standard_Landmark_list)
 
-                                    # 어깨 기울기
-                                    shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
-                                    Shoulder_slope_list.append(shoulder_slope)
-                                # if len(Landmark_list) != 0:
-                                #     left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                #         left_shoulder_point, Landmark_list)
-                                #     right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
-                                #         right_shoulder_point, Landmark_list)
-                                #
-                                #
-                                #     center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, Landmark_list)
-                                #     center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
-                                #     center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
-                                #
-                                #     # 어깨 기울기
-                                #     shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
-                                #     Shoulder_slope_list.append(shoulder_slope)
-                        # except Exception as e:
-                        #     continue
-                        else :
-                            continue
-                    else:
+
+                                # center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, standard_Landmark_list)
+                                # center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
+                                # center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
+
+                                # 어깨 기울기
+                                shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
+                                Shoulder_slope_list.append(shoulder_slope)
+                            # if len(Landmark_list) != 0:
+                            #     left_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                            #         left_shoulder_point, Landmark_list)
+                            #     right_shoulder_vertically_move_count += shoulder_movement.shoulder_vertically(
+                            #         right_shoulder_point, Landmark_list)
+                            #
+                            #
+                            #     center_shoulder_horizontally_move_count = shoulder_movement.shoulder_horizontally(center_shoulder_point, Landmark_list)
+                            #     center_shoulder_horizontally_left_move_count += center_shoulder_horizontally_move_count[0]
+                            #     center_shoulder_horizontally_right_move_count += center_shoulder_horizontally_move_count[1]
+                            #
+                            #     # 어깨 기울기
+                            #     shoulder_slope = (right_shoulder_point[1] - left_shoulder_point[1]) / (right_shoulder_point[0] - left_shoulder_point[0])
+                            #     Shoulder_slope_list.append(shoulder_slope)
+                    # except Exception as e:
+                    #     continue
+                    else :
                         continue
-                # except Exception as e:
-                #     continue
+                else:
+                    continue
+            # except Exception as e:
+            #     continue
 
             frame_num += 1
         else:
             break
 
-#     Face_count_exception = len(Face_count_list) - Face_count_list.count(1)
-#     Face_count_exception = Face_count_list.count(0)
-#     # print("얼굴>>>>>>>>>>", Face_count_list)
-#     if Face_count_exception * 2 >= (FPS * 7) :
-#         Face_analy_result = 1
-#     else:
-#         Face_analy_result = 0
+    #     Face_count_exception = len(Face_count_list) - Face_count_list.count(1)
+    #     Face_count_exception = Face_count_list.count(0)
+    #     # print("얼굴>>>>>>>>>>", Face_count_list)
+    #     if Face_count_exception * 2 >= (FPS * 7) :
+    #         Face_analy_result = 1
+    #     else:
+    #         Face_analy_result = 0
     first_count = 0
     fin_count = 0
     # print("Face_count_list>>>>>>>>>>", Face_count_list)
     for i in Face_count_list:
         if Face_count_list[i] == 0:
             first_count += 1
-            if first_count == 7:
+            if first_count == 5:
                 fin_count += 1
                 first_count = 0
         else:
@@ -515,6 +515,35 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         voiceDbScore = 0
         voiceToneScore = 0
         voiceSpeedScore = 0
+        res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
+                           face_check=Face_analy_result,
+                           sound_check=sound_confirm, emotion_surprise=round(Emotion_surprise_mean, 5),
+                           emotion_fear=round(Emotion_fear_mean, 5), emotion_aversion=round(Emotion_aversion_mean, 5),
+                           emotion_happy=round(Emotion_happy_mean, 5), emotion_sadness=round(Emotion_sadness_mean, 5),
+                           emotion_angry=round(Emotion_angry_mean, 5), emotion_neutral=round(Emotion_neutral_mean, 5),
+                           gaze=json.dumps(gaze_dict), face_angle=round(Roll_mean_value, 5),
+                           shoulder_angle=round(Shoulder_slope_mean_value, 5), left_shoulder=json.dumps(left_shoulder_dict),
+                           left_shoulder_move_count=left_shoulder_vertically_move_count,
+                           right_shoulder=json.dumps(right_shoulder_dict),
+                           right_shoulder_move_count=right_shoulder_vertically_move_count,
+                           center_shoulder=json.dumps(center_shoulder_dict),
+                           center_shoulder_left_move_count=center_shoulder_horizontally_left_move_count,
+                           center_shoulder_right_move_count=center_shoulder_horizontally_right_move_count,
+                           left_hand=json.dumps(left_hand_dict), left_hand_time=Left_Hand_time,
+                           left_hand_move_count=Left_hand_count,
+                           right_hand=json.dumps(right_hand_dict), right_hand_time=Right_Hand_time,
+                           right_hand_move_count=Right_hand_count,
+                           gaze_x_score=gazeXScore,
+                           gaze_y_score=gazeYScore,
+                           shoulder_vertical_score=shoulderVerticalScore,
+                           shoulder_horizon_score=shoulderHorizonScore,
+                           face_angle_score=faceAngleScore,
+                           gesture_score=gestureScore,
+                           watchfullness=watchfullness, document_sentiment_score=documentSentimentScore,
+                           document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
+                           voice_db_score=voiceDbScore,
+                           voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed,
+                           voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts, watchfullness_type=watchfullnessType)
     else:
         gazeXScore = scoring.GAZE_X_scoring(Gaze_std_value[0])
         gazeYScore = scoring.GAZE_Y_scoring(Gaze_std_value[1])
@@ -527,38 +556,39 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         voiceDbScore = voiceDbScore
         voiceToneScore = voiceToneScore
         voiceSpeedScore = voiceSpeedScore
+        res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
+                           face_check=Face_analy_result,
+                           sound_check=sound_confirm, emotion_surprise=round(Emotion_surprise_mean, 5),
+                           emotion_fear=round(Emotion_fear_mean, 5), emotion_aversion=round(Emotion_aversion_mean, 5),
+                           emotion_happy=round(Emotion_happy_mean, 5), emotion_sadness=round(Emotion_sadness_mean, 5),
+                           emotion_angry=round(Emotion_angry_mean, 5), emotion_neutral=round(Emotion_neutral_mean, 5),
+                           gaze=json.dumps(gaze_dict), face_angle=round(Roll_mean_value, 5),
+                           shoulder_angle=round(Shoulder_slope_mean_value, 5),
+                           left_shoulder=json.dumps(left_shoulder_dict),
+                           left_shoulder_move_count=left_shoulder_vertically_move_count,
+                           right_shoulder=json.dumps(right_shoulder_dict),
+                           right_shoulder_move_count=right_shoulder_vertically_move_count,
+                           center_shoulder=json.dumps(center_shoulder_dict),
+                           center_shoulder_left_move_count=center_shoulder_horizontally_left_move_count,
+                           center_shoulder_right_move_count=center_shoulder_horizontally_right_move_count,
+                           left_hand=json.dumps(left_hand_dict), left_hand_time=Left_Hand_time,
+                           left_hand_move_count=Left_hand_count,
+                           right_hand=json.dumps(right_hand_dict), right_hand_time=Right_Hand_time,
+                           right_hand_move_count=Right_hand_count,
+                           gaze_x_score=gazeXScore,
+                           gaze_y_score=gazeYScore,
+                           shoulder_vertical_score=shoulderVerticalScore,
+                           shoulder_horizon_score=shoulderHorizonScore,
+                           face_angle_score=faceAngleScore,
+                           gesture_score=gestureScore,
+                           watchfullness=watchfullness, document_sentiment_score=documentSentimentScore,
+                           document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
+                           voice_db_score=voiceDbScore,
+                           voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed,
+                           voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts,
+                           watchfullness_type=watchfullnessType)
 
 
-
-    res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
-                       face_check=Face_analy_result,
-                       sound_check=sound_confirm, emotion_surprise=round(Emotion_surprise_mean, 5),
-                       emotion_fear=round(Emotion_fear_mean, 5), emotion_aversion=round(Emotion_aversion_mean, 5),
-                       emotion_happy=round(Emotion_happy_mean, 5), emotion_sadness=round(Emotion_sadness_mean, 5),
-                       emotion_angry=round(Emotion_angry_mean, 5), emotion_neutral=round(Emotion_neutral_mean, 5),
-                       gaze=json.dumps(gaze_dict), face_angle=round(Roll_mean_value, 5),
-                       shoulder_angle=round(Shoulder_slope_mean_value, 5), left_shoulder=json.dumps(left_shoulder_dict),
-                       left_shoulder_move_count=left_shoulder_vertically_move_count,
-                       right_shoulder=json.dumps(right_shoulder_dict),
-                       right_shoulder_move_count=right_shoulder_vertically_move_count,
-                       center_shoulder=json.dumps(center_shoulder_dict),
-                       center_shoulder_left_move_count=center_shoulder_horizontally_left_move_count,
-                       center_shoulder_right_move_count=center_shoulder_horizontally_right_move_count,
-                       left_hand=json.dumps(left_hand_dict), left_hand_time=Left_Hand_time,
-                       left_hand_move_count=Left_hand_count,
-                       right_hand=json.dumps(right_hand_dict), right_hand_time=Right_Hand_time,
-                       right_hand_move_count=Right_hand_count,
-                       gaze_x_score=gazeXScore,
-                       gaze_y_score=gazeYScore,
-                       shoulder_vertical_score=shoulderVerticalScore,
-                       shoulder_horizon_score=shoulderHorizonScore,
-                       face_angle_score=faceAngleScore,
-                       gesture_score=gestureScore,
-                       watchfullness=watchfullness, document_sentiment_score=documentSentimentScore,
-                       document_sentiment_magnitude=documentSentimentMagnitude, voice_db=voiceDb,
-                       voice_db_score=voiceDbScore,
-                       voice_tone=voiceTone, voice_tone_score=voiceToneScore, voice_speed=voiceSpeed,
-                       voice_speed_score=voiceSpeedScore, stt=stt, qz_tts=qzTts, watchfullness_type=watchfullnessType)
     # , job_noun=json.dumps(job_noun, ensure_ascii=False))
 
     res.save()
