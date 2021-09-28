@@ -25,7 +25,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
     job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
-    zqCode = zqCode - 1
+    zqCode = int(zqCode) - 1
     code_noun = job_noun_file.loc[zqCode]
     code_noun = code_noun.values.tolist()
     code_noun_list = [x for x in code_noun if pd.isnull(x) == False]
