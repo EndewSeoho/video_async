@@ -34,20 +34,20 @@ def post(request):
     voiceToneScore = insert_data.get("voiceToneScore")
     voiceSpeed = insert_data.get("voiceSpeed")
     voiceSpeedScore = insert_data.get("voiceSpeedScore")
-    # try:
-    video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType)
+    try:
+        video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType)
 
-    db_update = ImQzFile.objects.get(file_key=fileKey)
-    db_update.qz_type = 'Y'
-    db_update.save()
+        db_update = ImQzFile.objects.get(file_key=fileKey)
+        db_update.qz_type = 'Y'
+        db_update.save()
 
-    # except Exception as e:
-    #     db_update = ImQzFile.objects.get(file_key=fileKey)
-    #     db_update.qz_type = 'F'
-    #     db_update.save()
-    #     response_dict = {"msessage": "Fail", "status": "200"}
-    #
-    #     return JsonResponse(response_dict)
+    except Exception as e:
+        db_update = ImQzFile.objects.get(file_key=fileKey)
+        db_update.qz_type = 'F'
+        db_update.save()
+        response_dict = {"msessage": "Fail", "status": "200"}
+
+        return JsonResponse(response_dict)
 
     # if result == 0:
     #     db_update = ImQzFile.objects.get(file_key=fileKey)
