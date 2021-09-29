@@ -111,20 +111,20 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         ret, frame = vc.read()
 
         if ret:
-            if (frame_num == 30):
-                standard_frame = cv2.flip(frame, 1)
-                standard_img = standard_frame
-
-                standard_list_Face = []
-                standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
-                if len(standard_list_Face) > 0:
-                    standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
-                # frame_num += 1
-                # print('000000000000000000', frame_num)
-
-                pose_detector.findPose(standard_img)
-                # print("GAZE>>>>>>>>>>>>", gaze_value)
-                standard_lmList_pose = pose_detector.findPosition(standard_img)
+            # if (frame_num == 30):
+            #     standard_frame = cv2.flip(frame, 1)
+            #     standard_img = standard_frame
+            #
+            #     standard_list_Face = []
+            #     standard_face_detection = Face_Detection(FD_Net, standard_img, standard_list_Face)
+            #     if len(standard_list_Face) > 0:
+            #         standard_Landmark_list = Landmark_Detection(Landmark_Net, standard_img, standard_list_Face, 0)
+            #     # frame_num += 1
+            #     # print('000000000000000000', frame_num)
+            #
+            #     pose_detector.findPose(standard_img)
+            #     # print("GAZE>>>>>>>>>>>>", gaze_value)
+            #     standard_lmList_pose = pose_detector.findPosition(standard_img)
 
             if (frame_num >= 31 and frame_num % 5 == 0):
 
@@ -362,7 +362,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
         horizontal_list = []
         horizontal_t = 0
-        horizontal_prev = standard_lmList_pose[12][1]
+        horizontal_prev = 0
         # print(Right_shoulder_x_point_list)
         for i  in Left_shoulder_x_point_list:
             if i < horizontal_prev:
@@ -379,7 +379,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
         vertical_list = []
         vertical_t = 0
-        vertical_prev = standard_lmList_pose[12][2]
+        vertical_prev = 0
         # print(standard_lmList_pose[12][2])
         # print(Left_shoulder_y_point_list)
         for i in Left_shoulder_y_point_list:
@@ -410,7 +410,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
         horizontal_list = []
         horizontal_t = 0
-        horizontal_prev = standard_lmList_pose[11][1]
+        horizontal_prev = 0
         # print(Right_shoulder_x_point_list)
         for i in Right_shoulder_x_point_list:
             if i > horizontal_prev:
@@ -427,7 +427,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
 
         vertical_list = []
         vertical_t = 0
-        vertical_prev = standard_lmList_pose[11][2]
+        vertical_prev = 0
         # print(standard_lmList_pose[12][2])
         # print(Left_shoulder_y_point_list)
         for i in Right_shoulder_y_point_list:
