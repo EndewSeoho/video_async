@@ -383,11 +383,11 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         # print(standard_lmList_pose[12][2])
         # print(Left_shoulder_y_point_list)
         for i in Left_shoulder_y_point_list:
-            if i > vertical_prev:
+            if i < vertical_prev:
                 vertical_list.append(1)
                 prev = i
             else :
-                if len(vertical_list) > 3 :
+                if len(vertical_list) > 3:
                     vertical_t += 1
                     vertical_list = []
                 else :
@@ -431,7 +431,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         # print(standard_lmList_pose[12][2])
         # print(Left_shoulder_y_point_list)
         for i in Right_shoulder_y_point_list:
-            if i > vertical_prev:
+            if i < vertical_prev:
                 vertical_list.append(1)
                 prev = i
             else:
