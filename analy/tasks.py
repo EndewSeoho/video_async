@@ -368,7 +368,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         for i  in Left_shoulder_x_point_list:
             if i < horizontal_prev:
                 horizontal_list.append(1)
-                prev = i
+                horizontal_prev = i
             else:
                 if len(horizontal_list) > 3:
                     horizontal_t += 1
@@ -386,7 +386,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         for i in Left_shoulder_y_point_list:
             if i < vertical_prev:
                 vertical_list.append(1)
-                prev = i
+                vertical_prev = i
             else :
                 if len(vertical_list) > 3:
                     vertical_t += 1
@@ -416,7 +416,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         for i in Right_shoulder_x_point_list:
             if i > horizontal_prev:
                 horizontal_list.append(1)
-                prev = i
+                horizontal_prev = i
             else:
                 if len(horizontal_list) > 3:
                     horizontal_t += 1
@@ -434,7 +434,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         for i in Right_shoulder_y_point_list:
             if i < vertical_prev:
                 vertical_list.append(1)
-                prev = i
+                vertical_prev = i
             else:
                 if len(vertical_list) > 3:
                     vertical_t += 1
