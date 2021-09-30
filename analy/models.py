@@ -98,6 +98,7 @@ class ImQzFile(models.Model):
     json_speed = models.CharField(db_column='JSON_SPEED', max_length=500, blank=True, null=True)  # Field name made lowercase.
     thum_url = models.CharField(db_column='THUM_URL', max_length=500, blank=True, null=True)  # Field name made lowercase.
     regdate = models.CharField(db_column='REGDATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    # regdate = models.CharField(db_column='REG+DATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
     qz_org_tts = models.CharField(db_column='QZ_ORG_TTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
