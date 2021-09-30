@@ -370,7 +370,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                 horizontal_list.append(1)
                 horizontal_prev = i
             else:
-                if len(horizontal_list) > 3:
+                if len(horizontal_list) > 6:
                     horizontal_t += 1
                     horizontal_list = []
                 else :
@@ -418,7 +418,7 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                 horizontal_list.append(1)
                 horizontal_prev = i
             else:
-                if len(horizontal_list) > 3:
+                if len(horizontal_list) > 6:
                     horizontal_t += 1
                     horizontal_list = []
                 else:
