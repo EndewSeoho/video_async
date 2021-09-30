@@ -105,7 +105,7 @@ DATABASES = {
         'NAME': 'INTERVIEWMASTER',
         'USER': 'root',
         'PASSWORD': 'withmind1!',
-        'HOST': 'rdsimtest.ciravsrvnjpk.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'withmindim.ciravsrvnjpk.ap-northeast-2.rds.amazonaws.com',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'"
