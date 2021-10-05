@@ -113,6 +113,20 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'INTERVIEWMASTER',
+#         'USER': 'root',
+#         'PASSWORD': 'withmind1!',
+#         'HOST': 'rdsimtest.ciravsrvnjpk.ap-northeast-2.rds.amazonaws.com',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'"
+#         }
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

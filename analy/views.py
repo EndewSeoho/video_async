@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from .models import ImQzFile
+from .models import ImQzFile, ImQzAnalysis
 import json
 from .tasks import video
 from rest_framework.decorators import api_view, permission_classes
@@ -43,8 +43,45 @@ def post(request):
     #
     except Exception as e:
         db_update = ImQzFile.objects.get(file_key=fileKey)
-        db_update.qz_type = 'F'
+        db_update.qz_type = 'Y'
         db_update.save()
+        point_dict = {"point": []}
+        vertical_spot_dict = {"low_spot": {"x": 0, "y": 0},
+                          "high_spot": {"x": 0, "y": 0}}
+        horizon_spot_dict = {"left_spot": {"x": 0, "y": 0},
+                            "right_spot": {"x": 0, "y": 0}}
+        res = ImQzAnalysis(file_key=fileKey, user_key=userKey, qz_group=qzGroup, qz_num=qzNum, group_code=groupCode,
+                           face_check=1,
+                           sound_check=1, emotion_surprise=0,
+                           emotion_fear=0, emotion_aversion=0,
+                           emotion_happy=0, emotion_sadness=0,
+                           emotion_angry=0, emotion_neutral=0,
+                           gaze=json.dumps(point_dict), face_angle=0,
+                           shoulder_angle=0,
+                           left_shoulder=json.dumps(vertical_spot_dict),
+                           left_shoulder_move_count=0,
+                           right_shoulder=json.dumps(vertical_spot_dict),
+                           right_shoulder_move_count=0,
+                           center_shoulder=json.dumps(horizon_spot_dict),
+                           center_shoulder_left_move_count=0,
+                           center_shoulder_right_move_count=0,
+                           left_hand=json.dumps(point_dict), left_hand_time=0,
+                           left_hand_move_count=0,
+                           right_hand=json.dumps(point_dict), right_hand_time=0,
+                           right_hand_move_count=0,
+                           gaze_x_score=0,
+                           gaze_y_score=0,
+                           shoulder_vertical_score=0,
+                           shoulder_horizon_score=0,
+                           face_angle_score=0,
+                           gesture_score=0,
+                           watchfullness=0, document_sentiment_score=0,
+                           document_sentiment_magnitude=0, voice_db=0,
+                           voice_db_score=0,
+                           voice_tone=0, voice_tone_score=0, voice_speed=0,
+                           voice_speed_score=0, stt=stt, qz_tts=0,
+                           watchfullness_type=watchfullnessType)
+        res.save()
         response_dict = {"msessage": "Fail", "status": "200"}
 
         return JsonResponse(response_dict)
