@@ -79,7 +79,7 @@ def post(request):
                            document_sentiment_magnitude=0, voice_db=0,
                            voice_db_score=0,
                            voice_tone=0, voice_tone_score=0, voice_speed=0,
-                           voice_speed_score=0, stt=stt, qz_tts=0,
+                           voice_speed_score=0, stt=stt, qz_tts=qzTts,
                            watchfullness_type=watchfullnessType)
         res.save()
         response_dict = {"msessage": "Fail", "status": "200"}
