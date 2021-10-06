@@ -170,8 +170,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 #시선분석
                                 gaze = Gaze_Regression(list_Face, 0)
                                 gaze_value = pose_detector.gaze_Detector(gaze, img)
-                                # if gaze_value[0] <= video_width and gaze_value <= video_height:
-                                Gaze_list.append(gaze_value)
+                                if gaze_value[0] <= video_width and gaze_value <= video_height:
+                                    Gaze_list.append(gaze_value)
                                 pose_detector.findPose(img)
                                 # print("GAZE>>>>>>>>>>>>", gaze_value)
                                 lmList_pose = pose_detector.findPosition(img)
