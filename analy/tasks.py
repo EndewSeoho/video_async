@@ -28,8 +28,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
     # print("stt>>>>>>>", input_noun_list)
-    # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
-    job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
+    # job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
     zqCode = int(zqCode) - 1
     code_noun = job_noun_file.loc[zqCode]
@@ -170,8 +170,12 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
                                 #시선분석
                                 gaze = Gaze_Regression(list_Face, 0)
                                 gaze_value = pose_detector.gaze_Detector(gaze, img)
-                                if gaze_value[0] <= video_width and gaze_value <= video_height:
+                                if 0 < gaze_value[0] < video_width and 0 < gaze_value[1] < video_height:
+                                    # print("1", video_height, "2", video_width)
+                                    # print("시선>>>>>>>>>>>>>>>>>>>", gaze_value)
+
                                     Gaze_list.append(gaze_value)
+                                # print("sadas", Gaze_list)
                                 pose_detector.findPose(img)
                                 # print("GAZE>>>>>>>>>>>>", gaze_value)
                                 lmList_pose = pose_detector.findPosition(img)
@@ -510,8 +514,6 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     right_hand_dict = {"point": Right_Hand_point_result}
     # print("왼손>>>", left_hand_dict)
     # print("오른손>>>", right_hand_dict)
-
-
 
 
 
