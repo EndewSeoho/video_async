@@ -17,9 +17,9 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
     stt = str(stt)
 
     if stt.isspace() == True:
-        sound_confirm = 0
-    else :
         sound_confirm = 1
+    else :
+        sound_confirm = 0
 
     input_pos = komoran.pos(stt)
 
