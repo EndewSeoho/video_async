@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async, async_to_sync
 from rest_framework.response import Response
 from .models import ImQzFile, ImQzAnalysis
 import json
@@ -5,6 +6,9 @@ from .tasks import video
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from django.http import JsonResponse
+import time
+import asyncio
+from multiprocessing import Pool, freeze_support
 
 # @api_view(['GET'])
 # def helloAPI(request):
@@ -34,15 +38,18 @@ def post(request):
     voiceToneScore = insert_data.get("voiceToneScore")
     voiceSpeed = insert_data.get("voiceSpeed")
     voiceSpeedScore = insert_data.get("voiceSpeedScore")
+
     try:
         video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore, documentSentimentMagnitude, voiceDb, voiceDbScore, voiceTone, voiceToneScore, voiceSpeed, voiceSpeedScore, watchfullnessType)
 
-        db_update = ImQzFile.objects.get(file_key=fileKey)
+
+        db_update = ImQzFile.objects.filter(file_key=fileKey).first()
+        # print(db_update)
         db_update.qz_type = 'Y'
         db_update.save()
     #
     except Exception as e:
-        db_update = ImQzFile.objects.get(file_key=fileKey)
+        db_update = ImQzFile.objects.filter(file_key=fileKey).first()
         db_update.qz_type = 'Y'
         db_update.save()
         point_dict = {"point": []}
@@ -85,20 +92,15 @@ def post(request):
         response_dict = {"msessage": "Fail", "status": "200"}
 
         return JsonResponse(response_dict)
+        # return Response(response_dict)
 
-    # if result == 0:
-    #     db_update = ImQzFile.objects.get(file_key=fileKey)
-    #     db_update.qz_type = 'Y'
-    #     db_update.save()
-    # else :
-    #     db_update = ImQzFile.objects.get(file_key=fileKey)
-    #     db_update.qz_type = 'F'
-    #     db_update.save()
-    # print(result)
+
+
     response_dict = {"msessage": "OK", "status": "200"}
 
 
     return JsonResponse(response_dict)
+    # return Response(response_dict)
 
 # def handler500(request):
 #     print("request", request)

@@ -81,6 +81,30 @@ class ImQzAnalysisJobword(models.Model):
 #         managed = False
 #         db_table = 'IM_QZ_ANALYSIS_FILE'
 
+# class ImQzFile(models.Model):
+#     file_key = models.AutoField(db_column='FILE_KEY', primary_key=True)  # Field name made lowercase.
+#     qz_group = models.IntegerField(db_column='QZ_GROUP', blank=True, null=True)  # Field name made lowercase.
+#     qz_platform = models.IntegerField(db_column='QZ_PLATFORM', blank=True, null=True)  # Field name made lowercase.
+#     user_key = models.IntegerField(db_column='USER_KEY', blank=True, null=True)  # Field name made lowercase.
+#     qz_num = models.IntegerField(db_column='QZ_NUM', blank=True, null=True)  # Field name made lowercase.
+#     qz_type = models.CharField(db_column='QZ_TYPE', max_length=45, blank=True, null=True)  # Field name made lowercase.
+#     group_code = models.IntegerField(db_column='GROUP_CODE', blank=True, null=True)  # Field name made lowercase.
+#     rtsp_url = models.CharField(db_column='RTSP_URL', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     file_url = models.CharField(db_column='FILE_URL', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     json_express = models.CharField(db_column='JSON_EXPRESS', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     json_action = models.CharField(db_column='JSON_ACTION', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     json_tone = models.CharField(db_column='JSON_TONE', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     json_db = models.CharField(db_column='JSON_DB', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     json_speed = models.CharField(db_column='JSON_SPEED', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     thum_url = models.CharField(db_column='THUM_URL', max_length=500, blank=True, null=True)  # Field name made lowercase.
+#     regdate = models.CharField(db_column='REGDATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
+#     # regdate = models.CharField(db_column='REG+DATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
+#     qz_org_tts = models.CharField(db_column='QZ_ORG_TTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'IM_QZ_FILE'
+
 class ImQzFile(models.Model):
     file_key = models.AutoField(db_column='FILE_KEY', primary_key=True)  # Field name made lowercase.
     qz_group = models.IntegerField(db_column='QZ_GROUP', blank=True, null=True)  # Field name made lowercase.
@@ -98,10 +122,8 @@ class ImQzFile(models.Model):
     json_speed = models.CharField(db_column='JSON_SPEED', max_length=500, blank=True, null=True)  # Field name made lowercase.
     thum_url = models.CharField(db_column='THUM_URL', max_length=500, blank=True, null=True)  # Field name made lowercase.
     regdate = models.CharField(db_column='REGDATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    # regdate = models.CharField(db_column='REG+DATE', max_length=45, blank=True, null=True)  # Field name made lowercase.
     qz_org_tts = models.CharField(db_column='QZ_ORG_TTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'IM_QZ_FILE'
-

@@ -6,8 +6,13 @@ from .function import *
 from konlpy.tag import Komoran
 import numpy as np
 import pandas as pd
+import asyncio
 
 logger = get_task_logger(__name__)
+
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0, 1"
 
 
 def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzTts, documentSentimentScore,
@@ -28,8 +33,8 @@ def video(userKey, qzGroup, groupCode, qzNum, fileKey, fileUrl, zqCode, stt, qzT
         if input_pos[i][1] == 'NNG' or input_pos[i][1] == 'NNP' or input_pos[i][1] == 'NR':
             input_noun_list.append(input_pos[i][0])
     # print("stt>>>>>>>", input_noun_list)
-    # job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
-    job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
+    job_noun_file = pd.read_csv('C:/Users/withmind/Desktop/models/total_Noun_df.csv', encoding='UTF8')
+    # job_noun_file = pd.read_csv('/home/ubuntu/project/models/total_Noun_df.csv', encoding='UTF8')
     del job_noun_file['Unnamed: 0']
     zqCode = int(zqCode) - 1
     code_noun = job_noun_file.loc[zqCode]
